@@ -25,13 +25,64 @@ class CandleCountdown extends HookConsumerWidget {
     if (candle == null) return const SizedBox.shrink();
 
     final remaining = candle.extinguishedAt.difference(DateTime.now());
-    final duration = formatCandleDuration(remaining, context.l10n);
+    return CandleCountdownDisplay(remaining: remaining);
+  }
+}
+
+/// Presentation only; the controller remains the source of the burn deadline.
+class CandleCountdownDisplay extends StatelessWidget {
+  const CandleCountdownDisplay({super.key, required this.remaining});
+
+  final Duration remaining;
+
+  @override
+  Widget build(BuildContext context) {
+    final duration = formatCandleDuration(remaining);
+    final l10n = context.l10n;
+    final units = [
+      (duration.days, l10n.countdownDays),
+      (duration.hours, l10n.countdownHours),
+      (duration.minutes, l10n.countdownMinutes),
+      (duration.seconds, l10n.countdownSeconds),
+    ];
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Sizes.small),
       child: FittedBox(
         fit: BoxFit.scaleDown,
-        child: Text(duration, style: const TextStyle(fontSize: AppFontSizes.titleLarge)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i = 0; i < units.length; i++) ...[
+              if (i > 0) const SizedBox(width: Sizes.small),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DefaultTextStyle.merge(
+                    style: const TextStyle(
+                      fontSize: AppFontSizes.titleLarge,
+                      fontFeatures: [FontFeature.tabularFigures()],
+                    ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // Reserve digit slots so ticking never shifts the columns.
+                        ExcludeSemantics(
+                          child: Opacity(
+                            opacity: 0,
+                            child: Text("8" * (i == 0 ? duration.days.length : 2)),
+                          ),
+                        ),
+                        Text(units[i].$1),
+                      ],
+                    ),
+                  ),
+                  Text(units[i].$2, style: const TextStyle(fontSize: AppFontSizes.caption)),
+                ],
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

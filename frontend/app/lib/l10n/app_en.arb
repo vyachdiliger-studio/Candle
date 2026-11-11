@@ -189,18 +189,10 @@
   },
   "telegramSdkUnavailable": "Telegram Login SDK is unavailable. Reload the page and retry.",
   "policyConsentLink": "Privacy Policy",
-  "countdownDays": "{days}d {time}",
-  "@countdownDays": {
-    "description": "Remaining days followed by an HH:mm:ss clock.",
-    "placeholders": {
-      "days": {
-        "type": "int"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
+  "countdownDays": "days",
+  "countdownHours": "hours",
+  "countdownMinutes": "min",
+  "countdownSeconds": "sec",
   "candleSupporters": "{count, plural, =0{No supporters yet} =1{Supported by 1 person} other{Supported by {count} people}}",
   "@candleSupporters": {
     "description": "Unique supporters, excluding the candle author.",

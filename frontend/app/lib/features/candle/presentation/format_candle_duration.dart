@@ -1,13 +1,16 @@
-import "package:candle_frontend/l10n/localization.dart";
-
-String formatCandleDuration(Duration remaining, AppLocalizations l10n) {
+({String days, String hours, String minutes, String seconds}) formatCandleDuration(
+  Duration remaining,
+) {
   final left = remaining.isNegative ? Duration.zero : remaining;
   final days = left.inDays;
   final hours = left.inHours % Duration.hoursPerDay;
   final minutes = left.inMinutes % Duration.minutesPerHour;
   final seconds = left.inSeconds % Duration.secondsPerMinute;
 
-  final time = [hours, minutes, seconds].map((value) => value.toString().padLeft(2, "0")).join(":");
-
-  return days > 0 ? l10n.countdownDays(days, time) : time;
+  return (
+    days: days.toString(),
+    hours: hours.toString().padLeft(2, "0"),
+    minutes: minutes.toString().padLeft(2, "0"),
+    seconds: seconds.toString().padLeft(2, "0"),
+  );
 }
