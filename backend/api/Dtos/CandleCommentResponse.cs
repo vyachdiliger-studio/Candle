@@ -1,10 +1,11 @@
 namespace CandleBackend.Dtos;
 
 /// <summary>
-/// A comment as clients see it. A deleted comment that still has live replies is
-/// returned as a placeholder: <see cref="IsDeleted"/> is true and author and text are null.
-/// <see cref="RepliesCount"/> counts the live (not deleted) comments below this one,
-/// at any depth.
+/// A comment as clients see it. Deleted comments are not returned (their branch is
+/// deleted with them). A comment whose author deleted their account is returned as a
+/// placeholder while live replies remain: <see cref="IsDeleted"/> is true and author
+/// and text are null. <see cref="RepliesCount"/> counts the live comments below this
+/// one, at any depth.
 /// </summary>
 public sealed record CandleCommentResponse(
     long Id,

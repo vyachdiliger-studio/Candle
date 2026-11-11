@@ -12,6 +12,9 @@ class FakeCommentRepository implements CommentRepository {
   bool failCreate = false;
   bool failDelete = false;
   final deleted = <int>[];
+
+  /// Authors who deleted their account: their comments become placeholders.
+  final goneAuthors = <int>{};
   var _nextId = 1;
   var _clock = DateTime.utc(2026, 1, 1);
 
@@ -32,7 +35,8 @@ class FakeCommentRepository implements CommentRepository {
     return comment;
   }
 
-  bool _live(CandleComment c) => !deleted.contains(c.id);
+  bool _deleted(CandleComment c) => deleted.contains(c.id);
+  bool _live(CandleComment c) => !_deleted(c) && !goneAuthors.contains(c.author?.id);
 
   int _liveBelow(CandleComment c) {
     final children = all.where((d) => d.parentCommentId == c.id);
@@ -43,7 +47,7 @@ class FakeCommentRepository implements CommentRepository {
       c.copyWith(repliesCount: _liveBelow(c), isDeleted: !_live(c));
 
   CommentPage _page(List<CandleComment> items, String? cursor) {
-    final visible = items.where((c) => _live(c) || _liveBelow(c) > 0).toList();
+    final visible = items.where((c) => !_deleted(c) && (_live(c) || _liveBelow(c) > 0)).toList();
     final start = cursor == null ? 0 : int.parse(cursor);
     final end = (start + pageSize).clamp(0, visible.length);
     return CommentPage(
@@ -77,6 +81,13 @@ class FakeCommentRepository implements CommentRepository {
   @override
   Future<void> delete(int candleId, int commentId) async {
     if (failDelete) throw Exception("offline");
-    deleted.add(commentId);
+    void branch(int id) {
+      deleted.add(id);
+      for (final child in all.where((c) => c.parentCommentId == id)) {
+        branch(child.id);
+      }
+    }
+
+    branch(commentId);
   }
 }

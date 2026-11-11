@@ -263,6 +263,15 @@
   "commentSendFailed": "Could not send the comment. Please retry.",
   "deleteComment": "Delete comment",
   "deleteCommentConfirm": "Delete this comment? This cannot be undone.",
+  "deleteCommentWithReplies": "{count, plural, =1{Delete this comment and 1 reply? This cannot be undone.} other{Delete this comment and {count} replies? This cannot be undone.}}",
+  "@deleteCommentWithReplies": {
+    "description": "Live replies below the comment, at any depth; they are deleted with it.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "commentDeleteFailed": "Could not delete the comment. Please retry.",
   "reportComment": "Report comment",
   "commentActions": "Comment actions",
