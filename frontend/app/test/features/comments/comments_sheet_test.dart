@@ -1,6 +1,10 @@
 import "package:candle_frontend/core/constants/sizes.dart";
 import "package:candle_frontend/features/candle/domain/models/candle.dart";
 import "package:candle_frontend/features/comments/data/dio_comment_repository.dart";
+import "package:candle_frontend/features/moderation/data/dio_moderation_repository.dart";
+import "package:candle_frontend/features/moderation/domain/blocked_user.dart";
+import "package:candle_frontend/features/moderation/domain/moderation_repository.dart";
+import "package:candle_frontend/features/moderation/domain/report_reason.dart";
 import "package:candle_frontend/features/comments/presentation/comment_layout.dart";
 import "package:candle_frontend/features/comments/presentation/comments_sheet.dart";
 import "package:candle_frontend/l10n/localization.dart";
@@ -9,6 +13,24 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 import "fake_comment_repository.dart";
+
+class FakeModeration implements ModerationRepository {
+  final reports = <(ReportReason, int?)>[];
+
+  @override
+  Future<void> report({
+    required ReportReason reason,
+    int? candleId,
+    int? userId,
+    int? commentId,
+  }) async => reports.add((reason, commentId));
+
+  @override
+  Future<List<BlockedUser>> blockedUsers() async => const [];
+
+  @override
+  Future<void> setBlocked(int userId, {required bool blocked}) async {}
+}
 
 void main() {
   final candle = Candle(
@@ -31,29 +53,43 @@ void main() {
     repository.add("Thank you", parent: root, authorId: 42, username: "me");
   });
 
-  Future<void> open(WidgetTester tester, {int? userId, VoidCallback? onSignIn}) async {
+  late FakeModeration moderation;
+
+  Future<void> open(
+    WidgetTester tester, {
+    int? userId,
+    VoidCallback? onSignIn,
+    Widget Function(Widget opener)? wrap,
+  }) async {
+    moderation = FakeModeration();
     tester.view.physicalSize = const Size(400, 900);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [commentRepositoryProvider.overrideWithValue(repository)],
+        overrides: [
+          commentRepositoryProvider.overrideWithValue(repository),
+          moderationRepositoryProvider.overrideWithValue(moderation),
+        ],
         child: MaterialApp(
           locale: const Locale("en"),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
             body: Builder(
-              builder: (context) => TextButton(
-                onPressed: () => showCommentsSheet(
-                  context,
-                  candle: candle,
-                  userId: userId,
-                  onSignIn: onSignIn ?? () {},
-                ),
-                child: const Text("open"),
-              ),
+              builder: (context) {
+                final opener = TextButton(
+                  onPressed: () => showCommentsSheet(
+                    context,
+                    candle: candle,
+                    userId: userId,
+                    onSignIn: onSignIn ?? () {},
+                  ),
+                  child: const Text("open"),
+                );
+                return wrap == null ? opener : wrap(opener);
+              },
             ),
           ),
         ),
@@ -184,5 +220,53 @@ void main() {
     await tester.drag(header, const Offset(0, 700));
     await tester.pumpAndSettle();
     expect(find.byType(CommentsSheet), findsNothing);
+  });
+
+  testWidgets("gestures inside the sheet do not switch candles in the gallery", (tester) async {
+    final pages = PageController();
+    addTearDown(pages.dispose);
+    await open(
+      tester,
+      wrap: (opener) => PageView(
+        controller: pages,
+        children: [
+          Center(child: opener),
+          const Center(child: Text("next candle")),
+        ],
+      ),
+    );
+    final list = find.byKey(const ValueKey("comments-list"));
+    for (final offset in const [Offset(0, -300), Offset(-300, 0), Offset(300, 0)]) {
+      await tester.drag(list, offset);
+      await tester.pumpAndSettle();
+    }
+    expect(find.byType(CommentsSheet), findsOneWidget);
+    expect(pages.page, 0);
+  });
+
+  testWidgets("the list reloads when opened and on pull-to-refresh", (tester) async {
+    await open(tester);
+    expect(repository.requests, 1, reason: "first page loaded on opening");
+    repository.add("Fresh comment", authorId: 9, username: "mark");
+    expect(find.text("Fresh comment"), findsNothing);
+
+    await tester.fling(find.byKey(const ValueKey("comments-list")), const Offset(0, 400), 1000);
+    await tester.pumpAndSettle();
+    expect(repository.requests, 2);
+    expect(find.text("Fresh comment"), findsOneWidget);
+    expect(find.text("Light for grandma"), findsOneWidget);
+  });
+
+  testWidgets("other people's comments are reported through the report dialog", (tester) async {
+    await open(tester, userId: 42);
+    await tester.tap(find.byIcon(Icons.more_horiz).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text("Report comment"));
+    await tester.pumpAndSettle();
+    expect(find.text("Report comment"), findsOneWidget, reason: "dialog title");
+    await tester.tap(find.text("Spam or scam"));
+    await tester.pumpAndSettle();
+    expect(moderation.reports, [(ReportReason.spam, root)]);
+    expect(find.text("Report received. Thank you."), findsOneWidget);
   });
 }
