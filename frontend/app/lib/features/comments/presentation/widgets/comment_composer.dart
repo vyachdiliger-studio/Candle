@@ -90,7 +90,7 @@ class CommentComposer extends HookWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(
             Sizes.small,
-            Sizes.extraSmall,
+            Sizes.small,
             Sizes.extraSmall,
             Sizes.small,
           ),
