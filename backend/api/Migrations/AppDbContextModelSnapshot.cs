@@ -84,6 +84,62 @@ namespace CandleBackend.Migrations
                     b.ToTable("Candles");
                 });
 
+            modelBuilder.Entity("CandleBackend.Models.CandleComment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CandleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Depth")
+                        .HasColumnType("integer");
+
+                    b.Property<long?>("ParentCommentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<long?>("RootCommentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentCommentId");
+
+                    b.HasIndex("RootCommentId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("CandleId", "Path");
+
+                    b.HasIndex("CandleId", "ParentCommentId", "CreatedAt", "Id");
+
+                    b.ToTable("CandleComments");
+                });
+
             modelBuilder.Entity("CandleBackend.Models.CandleSupport", b =>
                 {
                     b.Property<long>("Id")
@@ -122,6 +178,9 @@ namespace CandleBackend.Migrations
                     b.Property<long?>("CandleId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("CommentId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -144,6 +203,8 @@ namespace CandleBackend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CandleId");
+
+                    b.HasIndex("CommentId");
 
                     b.HasIndex("ReportedUserId");
 
@@ -367,6 +428,39 @@ namespace CandleBackend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CandleBackend.Models.CandleComment", b =>
+                {
+                    b.HasOne("CandleBackend.Models.Candle", "Candle")
+                        .WithMany()
+                        .HasForeignKey("CandleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CandleBackend.Models.CandleComment", "ParentComment")
+                        .WithMany()
+                        .HasForeignKey("ParentCommentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("CandleBackend.Models.CandleComment", "RootComment")
+                        .WithMany()
+                        .HasForeignKey("RootCommentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("CandleBackend.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Candle");
+
+                    b.Navigation("ParentComment");
+
+                    b.Navigation("RootComment");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CandleBackend.Models.CandleSupport", b =>
                 {
                     b.HasOne("CandleBackend.Models.Candle", "Candle")
@@ -392,6 +486,11 @@ namespace CandleBackend.Migrations
                         .WithMany()
                         .HasForeignKey("CandleId");
 
+                    b.HasOne("CandleBackend.Models.CandleComment", "Comment")
+                        .WithMany()
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("CandleBackend.Models.User", "ReportedUser")
                         .WithMany()
                         .HasForeignKey("ReportedUserId")
@@ -405,6 +504,8 @@ namespace CandleBackend.Migrations
                         .IsRequired();
 
                     b.Navigation("Candle");
+
+                    b.Navigation("Comment");
 
                     b.Navigation("ReportedUser");
 

@@ -7,10 +7,11 @@ import "../application/moderation_controller.dart";
 import "../domain/report_reason.dart";
 
 class ReportDialog extends ConsumerWidget {
-  const ReportDialog({super.key, this.candleId, this.userId});
+  const ReportDialog({super.key, this.candleId, this.userId, this.commentId});
 
   final int? candleId;
   final int? userId;
+  final int? commentId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,7 +19,13 @@ class ReportDialog extends ConsumerWidget {
     return PopScope(
       canPop: !action.isLoading,
       child: AlertDialog(
-        title: Text(candleId != null ? context.l10n.reportCandle : context.l10n.reportAuthor),
+        title: Text(
+          commentId != null
+              ? context.l10n.reportComment
+              : candleId != null
+              ? context.l10n.reportCandle
+              : context.l10n.reportAuthor,
+        ),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -37,6 +44,7 @@ class ReportDialog extends ConsumerWidget {
                                 reason: reason,
                                 candleId: candleId,
                                 userId: userId,
+                                commentId: commentId,
                               );
                           if (sent && context.mounted) Navigator.of(context).pop(true);
                         },

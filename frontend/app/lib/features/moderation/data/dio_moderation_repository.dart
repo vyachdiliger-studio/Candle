@@ -16,7 +16,12 @@ class DioModerationRepository implements ModerationRepository {
   final Dio _dio;
 
   @override
-  Future<void> report({required ReportReason reason, int? candleId, int? userId}) async {
+  Future<void> report({
+    required ReportReason reason,
+    int? candleId,
+    int? userId,
+    int? commentId,
+  }) async {
     final reasonCode = switch (reason) {
       ReportReason.spam => 1,
       ReportReason.harassment => 2,
@@ -31,6 +36,7 @@ class DioModerationRepository implements ModerationRepository {
         "reason": reasonCode,
         "candleId": ?candleId,
         "userId": ?userId,
+        "commentId": ?commentId,
       },
     );
   }

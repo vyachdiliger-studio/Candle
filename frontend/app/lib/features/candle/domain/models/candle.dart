@@ -28,6 +28,9 @@ abstract class Candle with _$Candle {
     /// Where [location] is, as its author picked it; null when they didn't.
     String? address,
     @Default(0) int supportersCount,
+
+    /// Live comments in the candle's thread, replies included.
+    @Default(0) int commentsCount,
     CandleAuthor? author,
     MediaResource? background,
   }) = _Candle;

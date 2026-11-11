@@ -21,6 +21,7 @@ abstract class CandleDto with _$CandleDto {
     String? message,
     String? address,
     @Default(0) int supportersCount,
+    @Default(0) int commentsCount,
     CandleAuthor? author,
     @JsonKey(fromJson: _backgroundFromJson, toJson: _backgroundToJson) MediaResource? background,
   }) = _CandleDto;
@@ -31,6 +32,7 @@ abstract class CandleDto with _$CandleDto {
     id: id,
     author: author,
     supportersCount: supportersCount,
+    commentsCount: commentsCount,
     background: background,
     createdAt: createdAt,
     ignitedAt: ignitedAt,
@@ -44,6 +46,7 @@ abstract class CandleDto with _$CandleDto {
     id: c.id,
     author: c.author,
     supportersCount: c.supportersCount,
+    commentsCount: c.commentsCount,
     background: c.background,
     createdAt: c.createdAt,
     ignitedAt: c.ignitedAt,

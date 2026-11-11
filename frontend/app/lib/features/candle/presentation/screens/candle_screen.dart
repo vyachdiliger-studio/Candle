@@ -13,6 +13,8 @@ import "../models/candle_pres.dart";
 import "../widgets/candle_rive_icon.dart";
 import "../widgets/candle_support_count.dart";
 import "../widgets/candle_tap_sparks.dart";
+import "../../../comments/presentation/comments_button.dart";
+import "../../../comments/presentation/comments_sheet.dart";
 
 const _messageStyle = TextStyle(fontSize: AppFontSizes.candleTitle);
 
@@ -225,7 +227,24 @@ class CandleScreen extends HookConsumerWidget {
                     Positioned(
                       right: Sizes.none,
                       bottom: Sizes.none,
-                      child: CandleSupportCount(count: candle.supportersCount),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CommentsButton(
+                            count: candle.commentsCount,
+                            onPressed: () => showCommentsSheet(
+                              context,
+                              candle: candle,
+                              userId: userId,
+                              onSignIn: () => context.push(
+                                "/login?from=${Uri.encodeComponent("/candles/${candle.id}")}",
+                              ),
+                              onChanged: controller.syncWithServer,
+                            ),
+                          ),
+                          CandleSupportCount(count: candle.supportersCount),
+                        ],
+                      ),
                     ),
                 ],
               ),

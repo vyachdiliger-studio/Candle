@@ -48,6 +48,7 @@ public class Program
         builder.Services.AddHostedService<ResourcePreviewBackfillWorker>();
         builder.Services.AddDataProtection();
         builder.Services.AddSingleton<Pagination.CandleCursor>();
+        builder.Services.AddSingleton<Pagination.CommentCursor>();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
