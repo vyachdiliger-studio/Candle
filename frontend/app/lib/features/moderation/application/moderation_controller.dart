@@ -23,13 +23,19 @@ class ModerationController extends _$ModerationController {
     ref.watch(sessionEpochProvider);
   }
 
-  Future<bool> report({required ReportReason reason, int? candleId, int? userId}) => _run(
+  Future<bool> report({
+    required ReportReason reason,
+    int? candleId,
+    int? userId,
+    int? commentId,
+  }) => _run(
     () => ref
         .read(moderationRepositoryProvider)
         .report(
           reason: reason,
           candleId: candleId,
           userId: userId,
+          commentId: commentId,
         ),
   );
 
