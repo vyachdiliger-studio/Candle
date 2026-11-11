@@ -186,8 +186,8 @@ class CommentsController extends _$CommentsController {
     return true;
   }
 
-  /// Deletes an own comment. One with live replies stays as a placeholder;
-  /// placeholders left without live replies disappear.
+  /// Deletes an own comment together with its whole branch, as the server does.
+  /// A placeholder (author's account deleted) left without live replies disappears.
   Future<bool> delete(int commentId) async {
     final operationRef = ref;
     try {
@@ -202,9 +202,18 @@ class CommentsController extends _$CommentsController {
     final comments = {...state.comments};
     var top = state.top;
     final replies = {...state.replies};
+    final expanded = {...state.expanded};
+
+    void dropBranch(int id) {
+      for (final child in replies.remove(id)?.ids ?? const <int>[]) {
+        dropBranch(child);
+      }
+      comments.remove(id);
+      expanded.remove(id);
+    }
 
     void remove(CandleComment c) {
-      comments.remove(c.id);
+      dropBranch(c.id);
       final parent = c.parentCommentId;
       if (parent == null) {
         top = top.copyWith(ids: [...top.ids]..remove(c.id));
@@ -213,16 +222,13 @@ class CommentsController extends _$CommentsController {
       }
     }
 
-    if (comment.repliesCount > 0) {
-      comments[commentId] = comment.copyWith(isDeleted: true);
-    } else {
-      remove(comment);
-    }
-    for (final ancestor in _adjustAncestors(comments, comment.parentCommentId, -1)) {
+    remove(comment);
+    final removed = 1 + comment.repliesCount;
+    for (final ancestor in _adjustAncestors(comments, comment.parentCommentId, -removed)) {
       if (ancestor.isDeleted && ancestor.repliesCount <= 0) remove(ancestor);
     }
 
-    state = state.copyWith(comments: comments, top: top, replies: replies);
+    state = state.copyWith(comments: comments, top: top, replies: replies, expanded: expanded);
     return true;
   }
 

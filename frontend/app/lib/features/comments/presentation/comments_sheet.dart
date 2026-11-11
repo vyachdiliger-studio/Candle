@@ -123,7 +123,11 @@ class CommentsSheet extends HookConsumerWidget {
         context: context,
         builder: (dialogContext) => AlertDialog(
           title: Text(l10n.deleteComment),
-          content: Text(l10n.deleteCommentConfirm),
+          content: Text(
+            comment.repliesCount > 0
+                ? l10n.deleteCommentWithReplies(comment.repliesCount)
+                : l10n.deleteCommentConfirm,
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(false),
@@ -141,8 +145,12 @@ class CommentsSheet extends HookConsumerWidget {
       final deleted = await controller.delete(comment.id);
       if (!context.mounted) return;
       if (deleted) {
-        if (replyTo.value?.id == comment.id) replyTo.value = null;
-        countDelta.value--;
+        // The reply target may have been in the deleted branch.
+        final target = replyTo.value;
+        if (target != null && !ref.read(provider).comments.containsKey(target.id)) {
+          replyTo.value = null;
+        }
+        countDelta.value -= 1 + comment.repliesCount;
         onChanged?.call();
       } else {
         showMessage(l10n.commentDeleteFailed);
@@ -393,33 +401,36 @@ class _Header extends StatelessWidget {
           ),
         ),
       ),
-      Row(
-        children: [
-          if (onBack != null)
-            IconButton(
-              key: const ValueKey("comments-back"),
-              tooltip: context.l10n.backToComments,
-              onPressed: onBack,
-              icon: const Icon(Icons.arrow_back),
-            )
-          else
-            const SizedBox(width: kMinInteractiveDimension),
-          Expanded(
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: AppFontSizes.subtitle,
-                fontWeight: FontWeight.w600,
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.small),
+        child: Row(
+          children: [
+            if (onBack != null)
+              IconButton(
+                key: const ValueKey("comments-back"),
+                tooltip: context.l10n.backToComments,
+                onPressed: onBack,
+                icon: const Icon(Icons.arrow_back),
+              )
+            else
+              const SizedBox(width: kMinInteractiveDimension),
+            Expanded(
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: AppFontSizes.subtitle,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
-          IconButton(
-            tooltip: context.l10n.close,
-            onPressed: onClose,
-            icon: const Icon(Icons.close),
-          ),
-        ],
+            IconButton(
+              tooltip: context.l10n.close,
+              onPressed: onClose,
+              icon: const Icon(Icons.close),
+            ),
+          ],
+        ),
       ),
     ],
   );

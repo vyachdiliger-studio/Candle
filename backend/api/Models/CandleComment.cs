@@ -43,7 +43,7 @@ public sealed class CandleComment
 
     public DateTime CreatedAt { get; set; }
 
-    /// <summary>Soft delete. The text stays in the database but is never returned.</summary>
+    /// <summary>Soft delete, set on the comment and its whole branch. The text stays in the database but is never returned.</summary>
     public DateTime? DeletedAt { get; set; }
 
     /// <summary>The prefix shared by <see cref="Path"/> of every descendant.</summary>

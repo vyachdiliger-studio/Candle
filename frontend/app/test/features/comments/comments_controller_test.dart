@@ -93,32 +93,41 @@ void main() {
     expect(texts(state().top.ids), ["root"]);
   });
 
-  test("deleting keeps placeholders only while live replies remain", () async {
+  test("deleting removes the comment with its whole branch", () async {
     final root = repository.add("root");
     final reply = repository.add("reply", parent: root.id);
-    final leaf = repository.add("leaf", parent: root.id);
+    repository.add("deep", parent: reply.id);
+    final other = repository.add("other");
     await controller().refresh();
     await controller().showReplies(root.id);
+    await controller().showReplies(reply.id);
+    expect(state().comments[root.id]!.repliesCount, 2);
 
-    expect(await controller().delete(leaf.id), isTrue);
-    expect(texts(state().replies[root.id]!.ids), ["reply"]);
-    expect(state().comments[root.id]!.repliesCount, 1);
+    expect(await controller().delete(reply.id), isTrue);
+    expect(state().replies[root.id]!.ids, isEmpty);
+    expect(state().comments.containsKey(reply.id), isFalse);
+    expect(state().replies.containsKey(reply.id), isFalse, reason: "the branch is dropped");
+    expect(state().comments[root.id]!.repliesCount, 0);
 
     expect(await controller().delete(root.id), isTrue);
+    expect(state().top.ids, [other.id]);
+
+    repository.failDelete = true;
+    expect(await controller().delete(other.id), isFalse);
+    expect(state().top.ids, [other.id]);
+  });
+
+  test("a deleted account's comment stays as a placeholder until its replies are gone", () async {
+    final root = repository.add("gone", authorId: 5, username: "gone");
+    final reply = repository.add("mine", parent: root.id, authorId: 42, username: "me");
+    repository.goneAuthors.add(5);
+    await controller().refresh();
     final placeholder = state().comments[root.id]!;
     expect(placeholder.isDeleted, isTrue);
     expect(placeholder.text, isNull);
-    expect(placeholder.author, isNull);
-    expect(state().top.ids, [root.id]);
+    await controller().showReplies(root.id);
 
     expect(await controller().delete(reply.id), isTrue);
     expect(state().top.ids, isEmpty, reason: "nothing live is left below the placeholder");
-
-    repository.failDelete = true;
-    repository.add("kept");
-    await controller().refresh();
-    final kept = state().top.ids.single;
-    expect(await controller().delete(kept), isFalse);
-    expect(state().top.ids, [kept]);
   });
 }

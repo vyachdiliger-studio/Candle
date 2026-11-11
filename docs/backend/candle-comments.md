@@ -22,13 +22,17 @@ which is how reply counts and placeholder visibility are computed. Indexes cover
 listing by `(CandleId, ParentCommentId, CreatedAt, Id)` and subtree lookups by
 `(CandleId, Path)`.
 
+Deleting a comment deletes its whole branch, as in TikTok or Instagram: `DeletedAt`
+is set on the comment and every comment below it. Deleted comments are never listed
+and cannot be answered; nothing is erased from the database.
+
 A comment is **live** when it is not deleted and its author still has an account.
 
 - Counters only count live comments: `CommentsCount` on candle responses and
   `RepliesCount` on comments (live comments anywhere below, not just direct replies).
-- A deleted comment with live comments below it is listed as a placeholder:
-  `isDeleted: true`, `author` and `text` null. Without live comments below it, it
-  is not listed at all. Placeholders cannot be answered.
+- A comment whose author deleted their account is listed as a placeholder while live
+  comments remain below it: `isDeleted: true`, `author` and `text` null. Placeholders
+  cannot be answered.
 
 ## API
 
@@ -42,7 +46,7 @@ Protection keys changed returns `400 invalid_cursor`.
 | `GET /candles/{id}/comments?cursor=&limit=` | anyone | Top-level comments, newest first |
 | `GET /candles/{id}/comments/{commentId}/replies?cursor=&limit=` | anyone | Direct replies, oldest first |
 | `POST /candles/{id}/comments` `{ text, parentCommentId? }` | signed in | 201 with the comment |
-| `DELETE /candles/{id}/comments/{commentId}` | comment author | 204 |
+| `DELETE /candles/{id}/comments/{commentId}` | comment author | 204, the comment and its branch |
 
 ```json
 {
@@ -67,7 +71,7 @@ Errors:
 | `400 thread_too_deep` | The parent is already at depth 100 |
 | `400 invalid_cursor`, `400 invalid_limit` | Pagination parameters |
 | `404 candle_not_found` | No such candle, or its author is blocked by the caller |
-| `404 comment_not_found` | No such comment in this candle, or it is deleted (delete, reply) |
+| `404 comment_not_found` | No such comment in this candle, or it is deleted (replies, delete, reply) |
 | `403 forbidden` | Deleting someone else's comment |
 
 Comments of candles hidden by a user block are hidden with the candle. Blocks are

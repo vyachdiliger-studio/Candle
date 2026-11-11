@@ -165,6 +165,15 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text("Even deeper"), findsOneWidget);
     expect(find.text("Light for grandma"), findsNothing);
+    final sheet = tester.getRect(find.byType(CommentsSheet));
+    final back = tester.getRect(find.byKey(const ValueKey("comments-back")));
+    final close = tester.getRect(find.byIcon(Icons.close));
+    expect(back.left - sheet.left, greaterThanOrEqualTo(Sizes.small));
+    expect(
+      sheet.right - close.right,
+      greaterThan(Sizes.small),
+      reason: "buttons keep off the edges",
+    );
     await tester.tap(find.byKey(const ValueKey("comments-back")));
     await tester.pumpAndSettle();
     expect(find.text("Light for grandma"), findsOneWidget);
@@ -187,6 +196,21 @@ void main() {
     expect(repository.deleted, [repository.all[2].id]);
     expect(find.text("Comments · 3"), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets("deleting a comment with replies warns and removes the branch", (tester) async {
+    await open(tester, userId: 7);
+    await tester.tap(find.byIcon(Icons.more_horiz).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text("Delete comment"));
+    await tester.pumpAndSettle();
+    expect(find.text("Delete this comment and 2 replies? This cannot be undone."), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey("confirm-delete-comment")));
+    await tester.pumpAndSettle();
+    expect(find.text("Light for grandma"), findsNothing);
+    expect(find.text("Comment deleted"), findsNothing);
+    expect(find.text("Comments · 0"), findsOneWidget);
+    expect(repository.deleted.length, 3);
   });
 
   testWidgets("deleting the last reply collapses its parent", (tester) async {

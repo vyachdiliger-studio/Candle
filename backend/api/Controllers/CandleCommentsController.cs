@@ -47,7 +47,8 @@ public sealed class CandleCommentsController(AppDbContext db, CommentCursor curs
         CancellationToken cancellationToken = default)
     {
         if (!await CandleExists(candleId, cancellationToken)) return NotFound("candle_not_found");
-        if (!await db.CandleComments.AnyAsync(c => c.Id == commentId && c.CandleId == candleId, cancellationToken))
+        if (!await db.CandleComments.AnyAsync(
+                c => c.Id == commentId && c.CandleId == candleId && c.DeletedAt == null, cancellationToken))
             return NotFound("comment_not_found");
         return await Page(candleId, commentId, $"replies:{commentId}", cursor, limit, newestFirst: false,
             cancellationToken);
@@ -106,8 +107,13 @@ public sealed class CandleCommentsController(AppDbContext db, CommentCursor curs
         if (comment is null) return NotFound("comment_not_found");
         if (comment.UserId != User.GetId()) return StatusCode(StatusCodes.Status403Forbidden, "forbidden");
 
-        comment.DeletedAt = DateTime.UtcNow;
-        await db.SaveChangesAsync(cancellationToken);
+        // The comment goes away together with its whole branch, as in TikTok or Instagram.
+        var now = DateTime.UtcNow;
+        var branch = comment.DescendantPath;
+        await db.CandleComments
+            .Where(c => c.CandleId == candleId && c.DeletedAt == null
+                && (c.Id == commentId || c.Path.StartsWith(branch)))
+            .ExecuteUpdateAsync(setters => setters.SetProperty(c => c.DeletedAt, now), cancellationToken);
         return NoContent();
     }
 
@@ -128,9 +134,10 @@ public sealed class CandleCommentsController(AppDbContext db, CommentCursor curs
             ? db.CandleComments.Where(c => c.CandleId == candleId && c.ParentCommentId == id)
             : db.CandleComments.Where(c => c.CandleId == candleId && c.ParentCommentId == null);
 
-        // Live = not deleted and the author still has an account. A comment is listed
-        // when it is live or has live replies somewhere below (then as a placeholder).
-        var rows = siblings.AsNoTracking().Select(c => new
+        // Deleting a comment deletes its branch, so deleted comments are never listed.
+        // Live = the author still has an account; a comment of a deleted account stays
+        // as a placeholder while live replies remain below it.
+        var rows = siblings.AsNoTracking().Where(c => c.DeletedAt == null).Select(c => new
         {
             c.Id,
             c.ParentCommentId,
@@ -140,7 +147,7 @@ public sealed class CandleCommentsController(AppDbContext db, CommentCursor curs
             c.CreatedAt,
             c.UserId,
             c.User.Username,
-            Live = c.DeletedAt == null && !c.User.IsDeleted,
+            Live = !c.User.IsDeleted,
             Replies = db.CandleComments.Count(d => d.CandleId == candleId
                 && d.Path.StartsWith(c.Path + c.Id.ToString() + "/")
                 && d.DeletedAt == null && !d.User.IsDeleted)
