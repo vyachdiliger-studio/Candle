@@ -1,0 +1,81 @@
+name: candle
+
+# Shared definition. Use it through an overlay:
+#   make dev     -> compose.yaml + compose.dev.yaml   (images built locally)
+#   make deploy  -> compose.yaml + compose.prod.yaml  (images pulled from GHCR, built by CI)
+# All secrets come from .env (see .env.example).
+
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: api/Dockerfile
+    environment:
+      ConnectionStrings__Default: >-
+        Host=db;Port=5432;Database=candle;Username=candle;Password=${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      Jwt__Key: ${JWT_KEY:?set JWT_KEY in .env}
+      Storage__Endpoint: http://storage:8333
+      Storage__PublicEndpoint: ${PUBLIC_URL:?set PUBLIC_URL in .env}
+      Storage__AccessKey: ${STORAGE_ACCESS_KEY:?set STORAGE_ACCESS_KEY in .env}
+      Storage__SecretKey: ${STORAGE_SECRET_KEY:?set STORAGE_SECRET_KEY in .env}
+      WebApp__PublicUrl: ${PUBLIC_URL}
+      WebApp__EntryPointUrl: http://web/index.html
+      TelegramBot__Enabled: ${TELEGRAM_BOT_ENABLED:-false}
+      TelegramBot__Token: ${TELEGRAM_BOT_TOKEN:-}
+      TelegramBot__WebhookSecret: ${TELEGRAM_WEBHOOK_SECRET:-}
+      TelegramBot__WebhookUrl: ${PUBLIC_URL}/api/telegram/webhook
+      TelegramBot__MiniAppUrl: ${PUBLIC_URL}
+    depends_on:
+      db:
+        condition: service_healthy
+      storage:
+        condition: service_started
+
+  web:
+    build:
+      context: ./frontend/app
+      args:
+        API_BASE_URL: ${PUBLIC_URL}/api
+        SHARE_BASE_URL: ${PUBLIC_URL}
+
+  # Candle's single entry point (plain HTTP). TLS is terminated in front of it:
+  # by the server's Caddy in production, not at all in development.
+  proxy:
+    image: caddy:2.11-alpine
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+    ports:
+      - "${HTTP_BIND:-127.0.0.1}:${HTTP_PORT:-8090}:80"
+    depends_on:
+      - api
+      - web
+      - storage
+
+  storage:
+    image: chrislusf/seaweedfs:4.47
+    command: ["mini", "-dir=/data"]
+    environment:
+      AWS_ACCESS_KEY_ID: ${STORAGE_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${STORAGE_SECRET_KEY}
+      S3_BUCKET: candle-media
+    volumes:
+      - media_data:/data
+
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: candle
+      POSTGRES_USER: candle
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U candle -d candle"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+volumes:
+  pg_data:
+  media_data:

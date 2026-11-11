@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.vyachdiliger.candle",
+      "sha256_cert_fingerprints": [
+        "AD:D3:32:F7:FB:FF:EF:7B:F2:05:9A:81:44:DF:06:FB:96:5A:D1:FF:C6:C1:80:C3:DA:2E:6A:2B:26:68:0D:CA",
+        "01:D4:C9:92:DA:A9:18:41:E8:B5:05:4E:12:F2:D1:93:32:4E:B8:F1:0A:C5:53:49:DC:88:F3:5C:85:3F:B7:19"
+      ]
+    }
+  }
+]

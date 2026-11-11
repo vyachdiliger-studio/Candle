@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640">
+  <defs>
+    <radialGradient id="halo"><stop stop-color="#efbb76" stop-opacity=".26"/><stop offset="1" stop-color="#efbb76" stop-opacity="0"/></radialGradient>
+    <linearGradient id="wax"><stop stop-color="#cfb999"/><stop offset=".48" stop-color="#f9edcf"/><stop offset="1" stop-color="#bd9f80"/></linearGradient>
+    <linearGradient id="fire" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="#e99b50"/><stop offset=".6" stop-color="#ffd88c"/><stop offset="1" stop-color="#fff7dc"/></linearGradient>
+  </defs>
+  <circle cx="320" cy="278" r="248" fill="url(#halo)"/>
+  <ellipse cx="320" cy="488" rx="109" ry="19" fill="#080e15" opacity=".45"/>
+  <path d="M267 317h106v155q-53 26-106 0z" fill="url(#wax)"/>
+  <ellipse cx="320" cy="317" rx="53" ry="13" fill="#fff0cf"/>
+  <path d="M284 321v31q0 13 8 13t8-13v-26" fill="#fff0cf"/>
+  <path d="M320 313v-26" stroke="#4b342b" stroke-width="7" stroke-linecap="round"/>
+  <path d="M323 140c14 58 54 77 44 121-6 29-28 40-47 39-33-1-50-23-46-49 5-36 39-58 49-111z" fill="url(#fire)"/>
+  <path d="M320 224c0 25-24 35-17 59 4 12 21 17 31 5 14-17-6-38-14-64z" fill="#fff8df"/>
+  <circle cx="228" cy="229" r="3" fill="#f0d6a2" opacity=".5"/>
+  <circle cx="412" cy="191" r="2" fill="#f0d6a2" opacity=".4"/>
+</svg>

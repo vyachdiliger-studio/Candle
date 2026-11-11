@@ -1,0 +1,33 @@
+services:
+  api:
+    build:
+      target: dev
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    volumes:
+      - ./backend:/src
+      - api_obj:/src/api/obj
+      - api_bin:/src/api/bin
+      - bot_obj:/src/bot/obj
+      - bot_bin:/src/bot/bin
+      - nuget:/root/.nuget/packages
+
+  web:
+    build:
+      target: prod
+
+  # Exposed so the API can also run from an IDE (appsettings.Development.json).
+  storage:
+    ports:
+      - "127.0.0.1:${DEV_STORAGE_PORT:-8333}:8333"
+
+  db:
+    ports:
+      - "127.0.0.1:${DEV_DB_PORT:-5433}:5432"
+
+volumes:
+  api_obj:
+  api_bin:
+  bot_obj:
+  bot_bin:
+  nuget:

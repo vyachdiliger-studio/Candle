@@ -1,0 +1,71 @@
+<root>
+  <data name="Welcome" xml:space="preserve">
+    <value>🕯 &lt;b&gt;A little light for someone who matters.&lt;/b&gt;
+
+Candle is a place to light a candle in memory of someone, to offer support, or to share a wish.
+
+Add a few words, choose a background and share your candle. Others can help keep its flame alive.
+
+&lt;i&gt;Your next little light starts here.&lt;/i&gt;</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>🕯 &lt;b&gt;Your first candle&lt;/b&gt;
+
+&lt;b&gt;1. Open Candle&lt;/b&gt;
+Sign in and select “New candle”.
+
+&lt;b&gt;2. Make it yours&lt;/b&gt;
+Add a message and, if you like, a background image. Then light your candle.
+
+&lt;b&gt;3. Share a little light&lt;/b&gt;
+Send the candle link to someone. Tap a burning candle to help it stay alight.
+
+&lt;i&gt;Candles and their messages are public. Share only what you want others to see.&lt;/i&gt;</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>🌐 &lt;b&gt;Choose your language / Выберите язык&lt;/b&gt;
+
+The bot will remember your choice.
+Бот запомнит ваш выбор.</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>I can help you open Candle, find your way around, or change the bot language. Choose an option below.</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>🕯 Open Candle</value>
+  </data>
+  <data name="HelpButton" xml:space="preserve">
+    <value>How it works</value>
+  </data>
+  <data name="LanguageButton" xml:space="preserve">
+    <value>🌐 Language / Язык</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>← Back</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>Language saved</value>
+  </data>
+  <data name="ShortDescription" xml:space="preserve">
+    <value>Light a candle in memory, in support, or with a wish. Share it and keep its flame alive together.</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>A little light for someone who matters. 🕯
+
+Create a candle, add a message and a personal background, and share it with someone. Help each other keep the flame alive.
+
+Open Candle below. Available in Telegram, on the web and on mobile.</value>
+  </data>
+  <data name="StartCommand" xml:space="preserve">
+    <value>Open the welcome screen</value>
+  </data>
+  <data name="HelpCommand" xml:space="preserve">
+    <value>Learn how Candle works</value>
+  </data>
+  <data name="LanguageCommand" xml:space="preserve">
+    <value>Choose your language</value>
+  </data>
+  <data name="SettingsCommand" xml:space="preserve">
+    <value>Language settings</value>
+  </data>
+</root>

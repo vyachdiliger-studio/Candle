@@ -1,0 +1,25 @@
+# Images are built and pushed by GitHub Actions (.github/workflows/ci.yml).
+# `make deploy` pulls them; `make prod-build` builds them on this machine instead.
+services:
+  api:
+    image: ${IMAGE_REGISTRY:-ghcr.io/chandrey06}/candle-api:${IMAGE_TAG:-latest}
+    build:
+      target: prod
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+    restart: unless-stopped
+
+  web:
+    image: ${IMAGE_REGISTRY:-ghcr.io/chandrey06}/candle-web:${IMAGE_TAG:-latest}
+    build:
+      target: prod
+    restart: unless-stopped
+
+  proxy:
+    restart: unless-stopped
+
+  storage:
+    restart: unless-stopped
+
+  db:
+    restart: unless-stopped

@@ -1,0 +1,9 @@
+build/
+.dart_tool/
+.idea/
+android/
+ios/
+store/
+**/*.g.dart
+**/*.freezed.dart
+lib/l10n/generated/

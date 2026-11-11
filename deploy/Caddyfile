@@ -1,0 +1,19 @@
+# Candle's internal router (container `proxy`, plain HTTP on :80).
+# TLS and the public domain are handled in front of it, see docs/deployment.md.
+:80 {
+	encode zstd gzip
+
+	# /candles/{id} is rendered by the API (link previews); `handle` keeps the path intact.
+	@backend path /api /api/* /candles/*
+	handle @backend {
+		reverse_proxy api:8080
+	}
+
+	handle /candle-media/* {
+		reverse_proxy storage:8333
+	}
+
+	handle {
+		reverse_proxy web:80
+	}
+}

@@ -1,0 +1,15 @@
+{
+	admin off
+	auto_https off
+}
+
+:80 {
+	root * /srv
+	encode zstd gzip
+
+	# Flutter web file names are not content-hashed: always revalidate.
+	header Cache-Control "no-cache"
+
+	try_files {path} /index.html
+	file_server
+}
