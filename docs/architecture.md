@@ -51,7 +51,7 @@ The API fetches the Flutter `index.html` from `http://web/index.html` to render
 Dockerfiles use stages like Aura: `base` (restore + sources), `dev`, `publish`/`build`, `prod`.
 `compose.dev.yaml` builds locally and runs the API with `dotnet watch` on the mounted
 sources. In production the `prod` stages are built by GitHub Actions on every push to
-`main` and pushed to GHCR as `candle-api` / `candle-web` with tags `latest` and the commit
+`master` and pushed to GHCR as `candle-api` / `candle-web` with tags `latest` and the commit
 SHA; `compose.prod.yaml` pulls them (`IMAGE_REGISTRY`, `IMAGE_TAG`). The server never
 builds; `make prod-build` exists as a fallback. The Flutter SDK version is pinned in
 `frontend/app/Dockerfile` (`FLUTTER_VERSION`).

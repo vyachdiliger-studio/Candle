@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   backend:
@@ -39,7 +39,7 @@ jobs:
 
   # Production images for `make deploy`: ghcr.io/<owner>/candle-{api,web}:{latest,<sha>}.
   publish:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: [backend, frontend, compose, secrets]
     runs-on: ubuntu-latest
     permissions:

@@ -47,7 +47,7 @@ Details: [`docs/development.md`](docs/development.md).
 
 ## Deployment
 
-Push to `main` → GitHub Actions checks the code and publishes images to GHCR. Then on the server:
+Push to `master` → GitHub Actions checks the code and publishes images to GHCR. Then on the server:
 
 ```bash
 make deploy     # git pull + pull images + restart what changed

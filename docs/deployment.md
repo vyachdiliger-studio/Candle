@@ -2,7 +2,7 @@
 
 ## How a release works
 
-1. Push to `main`. GitHub Actions (`.github/workflows/ci.yml`) runs `make lint`,
+1. Push to `master`. GitHub Actions (`.github/workflows/ci.yml`) runs `make lint`,
    then builds the production images and pushes them to GHCR:
    `ghcr.io/<owner>/candle-api` and `candle-web`, tags `latest` and the commit SHA.
 2. Wait for the green check on GitHub (about 10 minutes).
@@ -79,7 +79,7 @@ Old layout: `/srv/candle/CandleBackend` (compose project `candlebackend`, API on
 served by the server's Caddy. The new stack starts with **empty volumes** and the
 data is restored from a fresh backup. Old volumes stay untouched for rollback.
 
-1. Make sure the images exist in GHCR (first green CI run on `main`) and do the
+1. Make sure the images exist in GHCR (first green CI run on `master`) and do the
    one-time setup above. `POSTGRES_PASSWORD` can be new: the new volume is created
    with it. Use **new** storage keys, JWT key, Telegram token (revoke the old one in
    @BotFather) and webhook secret.
