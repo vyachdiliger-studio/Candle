@@ -24,6 +24,10 @@ Future<void> showCommentsSheet(
   VoidCallback? onChanged,
 }) => showModalBottomSheet<void>(
   context: context,
+  // The shell's navigator is as narrow as the candle column; the root one lets
+  // the scrim cover the whole window while the sheet keeps the column width.
+  useRootNavigator: true,
+  constraints: const BoxConstraints(maxWidth: AppDimensions.candleContentMaxWidth),
   isScrollControlled: true,
   useSafeArea: true,
   // The header handles drags itself, so the list keeps pull-to-refresh.

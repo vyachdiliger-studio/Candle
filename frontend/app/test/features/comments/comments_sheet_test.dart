@@ -269,4 +269,53 @@ void main() {
     expect(moderation.reports, [(ReportReason.spam, root)]);
     expect(find.text("Report received. Thank you."), findsOneWidget);
   });
+
+  testWidgets("the scrim covers the whole window, not the narrow shell", (tester) async {
+    tester.view.physicalSize = const Size(1200, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    moderation = FakeModeration();
+    final shellNavigator = GlobalKey<NavigatorState>();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [commentRepositoryProvider.overrideWithValue(repository)],
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: Center(
+              // Like AppShell: the candle screen lives in a narrow nested navigator.
+              child: SizedBox(
+                width: AppDimensions.candleContentMaxWidth,
+                child: Navigator(
+                  key: shellNavigator,
+                  onGenerateRoute: (_) => MaterialPageRoute<void>(
+                    builder: (context) => TextButton(
+                      onPressed: () => showCommentsSheet(
+                        context,
+                        candle: candle,
+                        userId: null,
+                        onSignIn: () {},
+                      ),
+                      child: const Text("open"),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text("open"));
+    await tester.pumpAndSettle();
+    final scrim = tester.getRect(find.byType(ModalBarrier).last);
+    expect(scrim.width, 1200);
+    expect(scrim.height, 900);
+    expect(
+      tester.getSize(find.byType(CommentsSheet)).width,
+      lessThanOrEqualTo(AppDimensions.candleContentMaxWidth),
+    );
+  });
 }
