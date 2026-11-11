@@ -70,6 +70,16 @@ not require login; supporting or creating one does.
 The future archive in the drawer can use the same cursor API without a status
 filter and open a selection through `/candles/{id}`. It is not included here.
 
+## Countdown
+
+The header keeps the remaining burn time between the menu and map controls. Four
+columns always show days, hours, minutes and seconds, with localized RU/EN labels
+below the values (including zero days). Hours, minutes and seconds have two digits;
+days are not truncated. Expired candles display zeros. The display updates every
+second from the existing deadline; it does not change burn-time calculations.
+Tabular digit slots keep ticking values stable. The whole group scales down to
+fit narrow headers and enlarged text without covering the navigation controls.
+
 ## Validation
 
 Run `flutter test` and `flutter analyze` in the frontend. Generate sources with
