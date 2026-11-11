@@ -11,6 +11,7 @@ public class MappingProfile : Profile
     {
         CreateMap<Candle, CandleResponse>()
             .ForCtorParam(nameof(CandleResponse.SupportersCount), o => o.MapFrom(_ => 0))
+            .ForCtorParam(nameof(CandleResponse.CommentsCount), o => o.MapFrom(_ => 0))
             .ForCtorParam(
                 nameof(CandleResponse.Background),
                 o => o.MapFrom(c => c.BackgroundResource != null && c.BackgroundResource.ReadyAt != null ? c.BackgroundResource : null)

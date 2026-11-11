@@ -4,8 +4,9 @@ using CandleBackend.Models;
 namespace CandleBackend.Dtos;
 
 public sealed record CreateReportRequest(
-    [property: EnumDataType(typeof(ReportReason))] ReportReason Reason,
+    [EnumDataType(typeof(ReportReason))] ReportReason Reason,
     long? CandleId = null,
     long? UserId = null,
-    [property: MaxLength(2000)] string? Details = null
+    [MaxLength(2000)] string? Details = null,
+    long? CommentId = null
 );

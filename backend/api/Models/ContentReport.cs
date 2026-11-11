@@ -13,6 +13,8 @@ public sealed class ContentReport
     public User ReportedUser { get; set; } = null!;
     public long? CandleId { get; set; }
     public Candle? Candle { get; set; }
+    public long? CommentId { get; set; }
+    public CandleComment? Comment { get; set; }
     public ReportReason Reason { get; set; }
     [MaxLength(2000)]
     public string? Details { get; set; }

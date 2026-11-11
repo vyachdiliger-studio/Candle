@@ -11,7 +11,9 @@ public sealed class CandleResponseMapper(AppDbContext db, IMapper mapper)
     public async Task<CandleResponse> Map(Candle candle, CancellationToken cancellationToken = default)
     {
         var count = await db.CandleSupports.CountAsync(s => s.CandleId == candle.Id, cancellationToken);
-        return mapper.Map<CandleResponse>(candle) with { SupportersCount = count };
+        var comments = await db.CandleComments.CountAsync(
+            c => c.CandleId == candle.Id && c.DeletedAt == null && !c.User.IsDeleted, cancellationToken);
+        return mapper.Map<CandleResponse>(candle) with { SupportersCount = count, CommentsCount = comments };
     }
 
     public async Task<List<CandleResponse>> Map(
@@ -27,9 +29,16 @@ public sealed class CandleResponseMapper(AppDbContext db, IMapper mapper)
             .Select(g => new { CandleId = g.Key, Count = g.Count() })
             .ToDictionaryAsync(g => g.CandleId, g => g.Count, cancellationToken);
 
+        var comments = await db.CandleComments
+            .Where(c => ids.Contains(c.CandleId) && c.DeletedAt == null && !c.User.IsDeleted)
+            .GroupBy(c => c.CandleId)
+            .Select(g => new { CandleId = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(g => g.CandleId, g => g.Count, cancellationToken);
+
         return candles.Select(c => mapper.Map<CandleResponse>(c) with
         {
-            SupportersCount = counts.GetValueOrDefault(c.Id)
+            SupportersCount = counts.GetValueOrDefault(c.Id),
+            CommentsCount = comments.GetValueOrDefault(c.Id)
         }).ToList();
     }
 }

@@ -46,6 +46,8 @@ are expected to survive them; without retained keys clients restart pagination.
 
 `GET /candles/{id}` and map tiles are public. All Candle responses include
 `author: { id, username }`; the client tolerates missing authors for compatibility.
+They also include `supportersCount` and `commentsCount` (live comments, replies
+included; see `candle-comments.md`).
 `POST /candles` requires login, supports multiple burning candles, and returns
 201 with Location pointing to the new candle. PATCH remains owner-only.
 `POST /candles/{id}/boost` requires login, permits any supporter, and atomically

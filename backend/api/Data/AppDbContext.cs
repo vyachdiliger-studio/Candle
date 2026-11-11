@@ -13,6 +13,7 @@ public sealed class AppDbContext : DbContext
     public DbSet<MediaResource> MediaResources => Set<MediaResource>();
     public DbSet<User> Users => Set<User>();
     public DbSet<CandleSupport> CandleSupports => Set<CandleSupport>();
+    public DbSet<CandleComment> CandleComments => Set<CandleComment>();
     public DbSet<Candle> Candles => Set<Candle>();
     public DbSet<UserLogin> UserLogins => Set<UserLogin>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
@@ -37,6 +38,22 @@ public sealed class AppDbContext : DbContext
         });
 
         b.Entity<Candle>().Navigation(x => x.BackgroundResource).AutoInclude();
+
+        b.Entity<CandleComment>(e =>
+        {
+            e.Property(x => x.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            e.HasOne(x => x.ParentComment).WithMany()
+                .HasForeignKey(x => x.ParentCommentId).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(x => x.RootComment).WithMany()
+                .HasForeignKey(x => x.RootCommentId).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(x => x.Candle).WithMany()
+                .HasForeignKey(x => x.CandleId).OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(x => x.User).WithMany()
+                .HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Restrict);
+        });
+
+        b.Entity<ContentReport>().HasOne(x => x.Comment).WithMany()
+            .HasForeignKey(x => x.CommentId).OnDelete(DeleteBehavior.Restrict);
 
         b.Entity<UserLogin>().Property(x => x.ProviderData)
             .HasDefaultValueSql("'{}'::jsonb");

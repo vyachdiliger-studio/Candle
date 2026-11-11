@@ -10,5 +10,6 @@ public record CandleResponse(
     string? Address,
     CandleAuthorDto? Author,
     ResourceResponse? Background,
-    int SupportersCount
+    int SupportersCount,
+    int CommentsCount = 0
 );

@@ -16,15 +16,20 @@ public sealed class ReportsController(AppDbContext db) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateReportRequest request, CancellationToken cancellationToken)
     {
-        if (request.CandleId.HasValue == request.UserId.HasValue)
-            return BadRequest("report_target_required");
+        var targets = new[] { request.CandleId, request.UserId, request.CommentId }.Count(t => t.HasValue);
+        if (targets != 1) return BadRequest("report_target_required");
 
         var reporterId = User.GetId();
-        var targetId = request.CandleId is { } candleId
-            ? await db.Candles.Where(c => c.Id == candleId).Select(c => (long?)c.UserId)
-                .SingleOrDefaultAsync(cancellationToken)
-            : await db.Users.Where(u => u.Id == request.UserId && !u.IsDeleted).Select(u => (long?)u.Id)
-                .SingleOrDefaultAsync(cancellationToken);
+        var targetId = request switch
+        {
+            { CandleId: { } candleId } => await db.Candles.Where(c => c.Id == candleId)
+                .Select(c => (long?)c.UserId).SingleOrDefaultAsync(cancellationToken),
+            { CommentId: { } commentId } => await db.CandleComments
+                .Where(c => c.Id == commentId && c.DeletedAt == null && !c.User.IsDeleted)
+                .Select(c => (long?)c.UserId).SingleOrDefaultAsync(cancellationToken),
+            _ => await db.Users.Where(u => u.Id == request.UserId && !u.IsDeleted)
+                .Select(u => (long?)u.Id).SingleOrDefaultAsync(cancellationToken)
+        };
 
         if (targetId is null) return NotFound();
         if (targetId == reporterId) return BadRequest("cannot_report_yourself");
@@ -34,6 +39,7 @@ public sealed class ReportsController(AppDbContext db) : ControllerBase
             ReporterId = reporterId,
             ReportedUserId = targetId.Value,
             CandleId = request.CandleId,
+            CommentId = request.CommentId,
             Reason = request.Reason,
             Details = request.Details?.Trim(),
             CreatedAt = DateTime.UtcNow
