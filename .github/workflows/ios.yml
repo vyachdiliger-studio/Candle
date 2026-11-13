@@ -1,0 +1,40 @@
+name: iOS build
+
+# Compiles the iOS app without signing, so iOS breakage shows up in PRs even
+# though nobody on the team builds on a Mac yet. macOS runners are billed at a
+# higher rate, so this runs only when the app changes.
+on:
+  pull_request:
+    paths:
+      - "frontend/app/**"
+      - ".github/workflows/ios.yml"
+  push:
+    branches: [master]
+    paths:
+      - "frontend/app/**"
+      - ".github/workflows/ios.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: frontend/app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          # Keep in sync with FLUTTER_VERSION in frontend/app/Dockerfile.
+          flutter-version: 3.47.2
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter gen-l10n
+      - run: dart run build_runner build --delete-conflicting-outputs
+      - run: flutter build ios --release --no-codesign
