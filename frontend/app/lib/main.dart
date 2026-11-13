@@ -7,6 +7,7 @@ import "package:rive/rive.dart";
 
 import "app/app.dart";
 import "core/config/package_name_provider.dart";
+import "core/platform/telegram_mini_app.dart";
 import "core/security/token_refresher.dart";
 import "core/security/tokens.dart";
 import "features/auth/domain/auth_repository.dart";
@@ -15,6 +16,7 @@ import "features/auth/data/dio_auth_repository.dart";
 Future<void> main() async {
   usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
+  disableTelegramVerticalSwipes();
 
   await RiveNative.init();
 

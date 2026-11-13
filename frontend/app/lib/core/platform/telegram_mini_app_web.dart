@@ -14,6 +14,7 @@ extension type _WebApp(JSObject _) implements JSObject {
   @JS("HapticFeedback")
   external _Haptics? get haptics;
   external void openTelegramLink(String url);
+  external void disableVerticalSwipes();
 }
 
 /// Only a launch from Telegram carries launch data; the SDK script alone is
@@ -45,5 +46,17 @@ bool telegramTapHaptic() {
     return true;
   } catch (_) {
     return false;
+  }
+}
+
+/// Telegram closes or minimizes a Mini App on a vertical swipe, and on iOS that
+/// gesture wins over panning the map. Bot API 7.7+; does nothing elsewhere.
+void disableTelegramVerticalSwipes() {
+  try {
+    final app = _telegram?.webApp;
+    if (!isTelegramMiniApp || app == null || !app.isVersionAtLeast("7.7")) return;
+    app.disableVerticalSwipes();
+  } catch (_) {
+    // Older client or no SDK: keep Telegram's default swipe behaviour.
   }
 }
