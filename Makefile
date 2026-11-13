@@ -48,7 +48,7 @@ lint: lint-backend lint-frontend
 
 lint-backend:
 	mkdir -p .cache/nuget
-	$(DOTNET) sh -c "dotnet build Candle.slnx -warnaserror && dotnet format Candle.slnx --verify-no-changes"
+	$(DOTNET) sh -c "dotnet build Candle.slnx -warnaserror && dotnet test Candle.slnx --no-build && dotnet format Candle.slnx --verify-no-changes"
 
 # Analyzer + formatting + tests, on a clean copy of the sources inside the image.
 lint-frontend:

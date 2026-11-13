@@ -6,4 +6,7 @@
   <Folder Name="/backend/bot/">
     <Project Path="backend/bot/CandleBot.csproj" />
   </Folder>
+  <Folder Name="/backend/tests/">
+    <Project Path="backend/tests/CandleBackend.Tests.csproj" />
+  </Folder>
 </Solution>
