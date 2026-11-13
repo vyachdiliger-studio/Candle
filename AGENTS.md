@@ -11,7 +11,7 @@ Architecture: `docs/architecture.md`. Workflow: `docs/development.md`.
 
 - Run everything: `cp .env.example .env && make dev` (http://localhost:8090)
 - Verify before finishing: `make lint` must pass (backend build with warnings as
-  errors + `dotnet format`; `flutter analyze` + `dart format` + `flutter test`).
+  errors + `dotnet test` + `dotnet format`; `flutter analyze` + `dart format` + `flutter test`).
 - Apply formatting: `make format`.
 
 ## Backend (`backend/api`, `backend/bot`)
