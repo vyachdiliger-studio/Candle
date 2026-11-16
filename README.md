@@ -61,7 +61,7 @@ First-time server setup and the move from the old layout:
 - [`architecture.md`](docs/architecture.md): services, routing, configuration
 - [`development.md`](docs/development.md): workflow, commands, conventions
 - [`deployment.md`](docs/deployment.md): server setup, deploys, backups
-- [`backend/`](docs/backend): API behaviour (auth, gallery, comments, previews, media, bot)
+- [`backend/`](docs/backend): API behaviour (auth, gallery, comments, previews, media, bot, notifications)
 - [`frontend/`](docs/frontend): app behaviour (auth, sessions, diagnostics)
 
 Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md). AI coding agents: [`AGENTS.md`](AGENTS.md).
