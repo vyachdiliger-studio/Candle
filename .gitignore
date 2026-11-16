@@ -486,3 +486,6 @@ $RECYCLE.BIN/
 
 # Flutter: Android debug source set (matched by [Dd]ebug/ above)
 !frontend/app/android/app/src/debug/
+
+# Local scratch output from Claude sessions
+Claude outputs/
