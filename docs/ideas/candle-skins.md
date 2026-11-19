@@ -1,8 +1,7 @@
 # Candle skins
 
-Status: **idea, not scheduled.** Discussed on 16.11.2026. Nothing here is decided
-until the open questions below are answered; then this becomes the design for the
-issues.
+Status: **decided, not scheduled.** Discussed and decided on 16.11.2026 (see
+[Decisions](#decisions)). This is the design for the issues below.
 
 ## Why
 
@@ -49,7 +48,8 @@ catalogue and as a fallback on weak devices.
 
 **App:**
 
-- skin picker when lighting a candle;
+- skin picker when lighting a candle (the skin cannot be changed later);
+- "Light again" (#23) copies the skin together with the text, background and place;
 - download and cache skin files; fall back to the default skin while loading or
   on error;
 - map markers keep building synchronously from preloaded files (no flicker, same
@@ -61,17 +61,21 @@ catalogue and as a fallback on weak devices.
   graphics, not only source code;
 - the author's name is shown in the catalogue and on the Contributors screen (#11).
 
-## Open questions
+## Decisions
 
-1. **Format for artists.** Rive only (live animation, needs Rive skills), or also
-   PNG / sprite sheets (anyone can draw, poorer animation)? Proposal: start with Rive
-   and two or three skins of our own; add PNG skins later if artists without Rive
-   show up.
-2. **Paid skins.** Add a free/paid flag to the catalogue now (without payments), or
-   keep every skin free for now?
-3. **Changing the skin of a burning candle**, or only when lighting it?
+Decided on 16.11.2026.
 
-## Possible issues, once decided
+1. **Format: Rive first.** We start with two or three skins of our own in Rive,
+   using the contract from #14. PNG / sprite-sheet skins are added later, only if
+   artists without Rive skills show up.
+2. **Paid skins: flag now, payments later.** The catalogue gets a free/paid flag
+   and an availability window (seasonal skins) from the start, but every skin is
+   free until payments exist. No purchase flow in this work.
+3. **Skin is chosen only when lighting.** A burning candle keeps its skin: it
+   looks the same to everyone who supported it, and link previews never go stale.
+   To use another skin, light the candle again (#23).
+
+## Issues to create
 
 1. Skin specification `docs/skins.md` (non-code, label `design`).
 2. Skin catalogue and `SkinId` on the backend.
