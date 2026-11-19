@@ -65,3 +65,14 @@ First-time server setup and the move from the old layout:
 - [`frontend/`](docs/frontend): app behaviour (auth, sessions, diagnostics)
 
 Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md). AI coding agents: [`AGENTS.md`](AGENTS.md).
+
+## License
+
+Copyright (c) Dmytro Cherniavskyi and Candle contributors.
+
+- Code: [GNU AGPL v3.0](LICENSE). If you run a modified version as a public
+  service, you must publish your changes under the same licence.
+- Images, animations, icons and store graphics: all rights reserved,
+  see [`LICENSE-ASSETS.md`](LICENSE-ASSETS.md).
+- Name and logo: [`TRADEMARKS.md`](TRADEMARKS.md). Forks need their own name and icon.
+- Contributions: [Contributor License Agreement](CLA.md), signed once via the CLA bot.

@@ -30,5 +30,15 @@ Conventional style with a scope: `feat(candles): add supporter count`,
 
 ## Licensing
 
-<!-- TODO (maintainers): choose a license and set up the CLA bot before publishing. -->
-By submitting a pull request you agree to the Contributor License Agreement.
+- Code is licensed under [AGPL-3.0](LICENSE). Your contributions are published
+  under the same licence.
+- Before your first pull request is merged, sign the
+  [Contributor License Agreement](CLA.md): the CLA bot posts instructions on the
+  pull request, you sign once by replying with a comment. You keep the copyright
+  in your work; the CLA lets the maintainer relicense it, for example to ship it
+  in the store apps. It covers code and content alike: graphics, animations,
+  translations, audio.
+- Images, animations, icons and store graphics are not under AGPL:
+  see [`LICENSE-ASSETS.md`](LICENSE-ASSETS.md). The name and logo:
+  [`TRADEMARKS.md`](TRADEMARKS.md).
+- Third-party code or assets: name the source and its licence in the pull request.
