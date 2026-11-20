@@ -2,7 +2,7 @@
 # `make deploy` pulls them; `make prod-build` builds them on this machine instead.
 services:
   api:
-    image: ${IMAGE_REGISTRY:-ghcr.io/chandrey06}/candle-api:${IMAGE_TAG:-latest}
+    image: ${IMAGE_REGISTRY:-ghcr.io/vyachdiliger-studio}/candle-api:${IMAGE_TAG:-latest}
     build:
       target: prod
     environment:
@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
 
   web:
-    image: ${IMAGE_REGISTRY:-ghcr.io/chandrey06}/candle-web:${IMAGE_TAG:-latest}
+    image: ${IMAGE_REGISTRY:-ghcr.io/vyachdiliger-studio}/candle-web:${IMAGE_TAG:-latest}
     build:
       target: prod
     restart: unless-stopped

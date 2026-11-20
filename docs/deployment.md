@@ -4,7 +4,7 @@
 
 1. Push to `master`. GitHub Actions (`.github/workflows/ci.yml`) runs `make lint`,
    then builds the production images and pushes them to GHCR:
-   `ghcr.io/<owner>/candle-api` and `candle-web`, tags `latest` and the commit SHA.
+   `ghcr.io/vyachdiliger-studio/candle-api` and `candle-web`, tags `latest` and the commit SHA.
 2. Wait for the green check on GitHub (about 10 minutes).
 3. On the server:
 
@@ -49,7 +49,7 @@ repository (`deploy/Caddyfile`), so it changes with the code.
 | `TELEGRAM_BOT_ENABLED` | `true` |
 | `TELEGRAM_BOT_TOKEN` | Bot token from @BotFather |
 | `TELEGRAM_WEBHOOK_SECRET` | `openssl rand -hex 32` |
-| `IMAGE_REGISTRY` | `ghcr.io/<owner, lowercase>` |
+| `IMAGE_REGISTRY` | `ghcr.io/vyachdiliger-studio` |
 | `IMAGE_TAG` | `latest` |
 
 `DEV_*` variables are ignored. Keep `chmod 600 .env`.
@@ -66,7 +66,7 @@ repository (`deploy/Caddyfile`), so it changes with the code.
 2. **Clone and configure**:
 
    ```bash
-   git clone git@github.com:<owner>/Candle.git /srv/candle/Candle && cd /srv/candle/Candle
+   git clone git@github.com:vyachdiliger-studio/Candle.git /srv/candle/Candle && cd /srv/candle/Candle
    cp .env.example .env && chmod 600 .env && nano .env
    ```
 
