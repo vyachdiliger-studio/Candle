@@ -1,4 +1,9 @@
 class AppConfig {
+  /// Source revision baked into this artifact by CI or an explicit local build.
+  static const String buildCommit = String.fromEnvironment("BUILD_COMMIT");
+  static const String webBuildVersion = String.fromEnvironment("APP_VERSION");
+  static const String webBuildNumber = String.fromEnvironment("APP_BUILD_NUMBER");
+
   static const telegramClientId = "8745967336";
   static const telegramAndroidAppUrl = "https://app176182968-login.tg.dev";
   static const telegramIosAppUrl = "";

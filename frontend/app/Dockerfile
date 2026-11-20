@@ -40,10 +40,12 @@ FROM base AS build
 # Empty values keep the production defaults from lib/core/config/app_config.dart.
 ARG API_BASE_URL=""
 ARG SHARE_BASE_URL=""
+ARG BUILD_COMMIT=""
+ARG BUILD_NUMBER=""
 
-RUN flutter build web --release --base-href / \
-    ${API_BASE_URL:+--dart-define=API_BASE_URL=${API_BASE_URL}} \
-    ${SHARE_BASE_URL:+--dart-define=SHARE_BASE_URL=${SHARE_BASE_URL}}
+RUN BUILD_COMMIT="${BUILD_COMMIT}" BUILD_NUMBER="${BUILD_NUMBER}" \
+    API_BASE_URL="${API_BASE_URL}" SHARE_BASE_URL="${SHARE_BASE_URL}" \
+    bash scripts/build_web.sh --base-href /
 
 
 # Static file server for the web build; the edge proxy (deploy/Caddyfile) sits in front.

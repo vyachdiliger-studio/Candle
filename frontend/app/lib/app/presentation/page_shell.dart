@@ -1,5 +1,6 @@
 import "package:candle_frontend/common/ui/widgets/center_between.dart";
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 
 import "package:candle_frontend/core/constants/app_colors.dart";
 import "package:candle_frontend/core/constants/sizes.dart";
@@ -22,9 +23,15 @@ class PageShell extends StatelessWidget {
             padding: const EdgeInsets.all(Sizes.medium),
             child: CenterBetween(
               left: _BackButton(
-                // maybePop rather than pop: screens below use PopScope to
-                // unwind their own layers before the route itself goes.
-                onTap: () => Navigator.maybePop(context),
+                onTap: () async {
+                  final router = GoRouter.of(context);
+                  // Start at the active nested navigator so PopScope/onExit
+                  // can handle editing or selection before leaving the page.
+                  final handled = await router.routerDelegate.popRoute();
+                  // A direct link has no previous route. The root redirect
+                  // sends guests to login and signed-in users to their candles.
+                  if (!handled && context.mounted) router.go("/");
+                },
               ),
               child: Text(
                 title,

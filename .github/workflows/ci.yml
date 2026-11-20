@@ -70,6 +70,9 @@ jobs:
           context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
           target: prod
+          build-args: |
+            BUILD_COMMIT=${{ github.sha }}
+            BUILD_NUMBER=${{ github.run_number }}
           push: true
           tags: |
             ${{ env.IMAGE }}:latest

@@ -3,6 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:candle_frontend/core/constants/sizes.dart";
 import "package:candle_frontend/l10n/localization.dart";
 import "../application/language_controller.dart";
+import "app_info_tile.dart";
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -47,6 +48,8 @@ class SettingsScreen extends ConsumerWidget {
             selected: selectedCode == locale.toLanguageTag(),
             onTap: () => select(locale.toLanguageTag()),
           ),
+        const Divider(height: Sizes.large),
+        const AppInfoTile(),
       ],
     );
   }
