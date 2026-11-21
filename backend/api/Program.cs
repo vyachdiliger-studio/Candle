@@ -21,6 +21,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         EnsureJwtKeyIsSafe(builder);
+        EnsureCredentialsAreNotExamples(builder);
 
         // Add services to the container.
         builder.Services.AddDbContext<AppDbContext>(options =>
@@ -132,5 +133,23 @@ public class Program
         if (placeholders.Any(p => key.Contains(p, StringComparison.OrdinalIgnoreCase)))
             throw new InvalidOperationException(
                 "Jwt:Key looks like a development placeholder. Generate a real key for non-Development environments.");
+    }
+
+    // The repository is public: the example storage keys and database password from
+    // .env.example are known to everyone. Media storage is reachable from outside
+    // through /candle-media, so outside Development refuse to start with them.
+    private static void EnsureCredentialsAreNotExamples(WebApplicationBuilder builder)
+    {
+        if (builder.Environment.IsDevelopment()) return;
+
+        var config = builder.Configuration;
+        if (DevelopmentCredentials.IsExampleStorageKey(config["Storage:AccessKey"])
+            || DevelopmentCredentials.IsExampleStorageKey(config["Storage:SecretKey"]))
+            throw new InvalidOperationException(
+                "Storage keys are the examples from .env.example. Set real STORAGE_ACCESS_KEY and STORAGE_SECRET_KEY.");
+
+        if (DevelopmentCredentials.HasExampleDatabasePassword(config.GetConnectionString("Default")))
+            throw new InvalidOperationException(
+                "The database password is the example from .env.example. Set a real POSTGRES_PASSWORD.");
     }
 }
