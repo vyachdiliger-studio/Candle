@@ -119,8 +119,8 @@ namespace CandleBackend.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");

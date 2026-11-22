@@ -14,7 +14,7 @@ comment, reply to any comment and delete their own comments. Replies form a tree
 | `RootCommentId` | Top-level comment of the branch; null for a top-level comment |
 | `Path` | Ancestor ids, `/` for a top-level comment, `/12/45/` for a reply to 45 under 12 |
 | `Depth` | 0 for a top-level comment, 1 for a reply to it, and so on (max 100) |
-| `Text` | Trimmed, 1–1000 characters |
+| `Text` | Trimmed, 1–1000 user-perceived characters, at most 4000 UTF-16 code units |
 | `CreatedAt`, `DeletedAt` | `DeletedAt` is the soft delete; the text stays in the database |
 
 `Path` makes "everything below a comment" a single prefix match within the candle,
@@ -66,13 +66,18 @@ Errors:
 
 | Code | When |
 | --- | --- |
-| `400 invalid_comment_text` | Text empty after trimming or longer than 1000 characters |
+| `400 invalid_comment_text` | Text empty after trimming, longer than 1000 characters or 4000 UTF-16 code units |
 | `400 parent_not_in_candle` | `parentCommentId` belongs to another candle |
 | `400 thread_too_deep` | The parent is already at depth 100 |
 | `400 invalid_cursor`, `400 invalid_limit` | Pagination parameters |
 | `404 candle_not_found` | No such candle, or its author is blocked by the caller |
 | `404 comment_not_found` | No such comment in this candle, or it is deleted (replies, delete, reply) |
 | `403 forbidden` | Deleting someone else's comment |
+
+Text length counts user-perceived characters (grapheme clusters,
+`StringInfo.LengthInTextElements`), as the app's composer counter does, so an emoji
+made of several code points is one character. The raw size is capped at 4000
+UTF-16 code units (`CommentRules`).
 
 Comments of candles hidden by a user block are hidden with the candle. Blocks are
 not applied to individual comments yet.
