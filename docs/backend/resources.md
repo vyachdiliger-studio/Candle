@@ -13,8 +13,9 @@ InitialMigration; this baseline requires an empty database.
 The S3 bucket is initialized by SeaweedFS `mini` from `S3_BUCKET`.
 
 `Storage:Endpoint` is the server-side endpoint (`http://storage:8333` in Compose).
-`Storage:PublicEndpoint` is used to sign URLs that the client can reach. Compose sets it to `PUBLIC_URL`: the edge proxy forwards `/candle-media/*` to
-SeaweedFS, so uploads use the same origin as the app (HTTPS in production).
+`Storage:PublicEndpoint` is used to sign URLs that the client can reach. Compose sets it to `PUBLIC_URL`: the edge proxy forwards `PUT`/`OPTIONS` on
+`/candle-media/uploads/*` to SeaweedFS (everything else there gets 404), so uploads
+use the same origin as the app (HTTPS in production).
 The reverse proxy must preserve the signed Host, path and query string.
 Changing the hostname of an already signed URL invalidates its signature.
 

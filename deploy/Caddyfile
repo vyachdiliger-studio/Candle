@@ -9,8 +9,22 @@
 		reverse_proxy api:8080
 	}
 
+	# Media storage (SeaweedFS S3) is reachable from outside only for presigned
+	# uploads to the staging prefix. Everything else (GET, listing, DELETE,
+	# writes to published resources/*) is closed, so even leaked storage keys
+	# cannot read or change user media through the public URL. Images are served
+	# by the API under /api.
 	handle /candle-media/* {
-		reverse_proxy storage:8333
+		@upload {
+			method PUT OPTIONS
+			path /candle-media/uploads/*
+		}
+		handle @upload {
+			reverse_proxy storage:8333
+		}
+		handle {
+			respond 404
+		}
 	}
 
 	handle {
