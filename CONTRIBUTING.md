@@ -14,6 +14,8 @@ New ideas: open an issue first. The roadmap is owned by the maintainers.
 
 ## Rules
 
+- Found a vulnerability? Do not open a public issue: report it privately as
+  described in [`SECURITY.md`](SECURITY.md).
 - Never commit secrets, keystores or service account files. Configuration goes
   through `.env` (documented in `.env.example`).
 - Database changes: add an EF migration with the model change; never edit existing migrations.
