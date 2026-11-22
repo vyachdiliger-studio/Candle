@@ -43,8 +43,8 @@ void main() {
   testWidgets("values sit above their localized labels, including zero days", (tester) async {
     const localizedLabels = {
       "en": ["days", "hours", "min", "sec"],
-      "ru": ["дней", "часов", "минут", "секунд"],
-      "uk": ["днів", "годин", "хвилин", "секунд"],
+      "ru": ["дн", "ч", "мин", "сек"],
+      "uk": ["дн", "год", "хв", "сек"],
     };
     for (final locale in localizedLabels.keys) {
       await show(
