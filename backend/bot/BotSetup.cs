@@ -20,9 +20,10 @@ public sealed class BotSetup(
         {
             try
             {
-                foreach (var language in new[] { "", "en", "ru" })
+                // "" is the default profile for every Telegram language without its own texts.
+                foreach (var language in BotLanguage.Supported.Prepend(""))
                 {
-                    var texts = language == "ru" ? "ru" : "en";
+                    var texts = language == "" ? "en" : language;
                     await client.SetMyName("Candle", languageCode: language, cancellationToken: stoppingToken);
                     await client.SetMyDescription(BotText.Get("Description", texts),
                         languageCode: language, cancellationToken: stoppingToken);

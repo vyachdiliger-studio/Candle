@@ -23,10 +23,9 @@ Send the candle link to someone. Tap a burning candle to help it stay alight.
 &lt;i&gt;Candles and their messages are public. Share only what you want others to see.&lt;/i&gt;</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>🌐 &lt;b&gt;Choose your language / Выберите язык&lt;/b&gt;
+    <value>🌐 &lt;b&gt;Choose your language&lt;/b&gt;
 
-The bot will remember your choice.
-Бот запомнит ваш выбор.</value>
+The bot will remember your choice.</value>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>I can help you open Candle, find your way around, or change the bot language. Choose an option below.</value>
@@ -38,7 +37,7 @@ The bot will remember your choice.
     <value>How it works</value>
   </data>
   <data name="LanguageButton" xml:space="preserve">
-    <value>🌐 Language / Язык</value>
+    <value>🌐 Language</value>
   </data>
   <data name="Back" xml:space="preserve">
     <value>← Back</value>

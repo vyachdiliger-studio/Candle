@@ -23,15 +23,15 @@ public sealed class BotKeyboards(IOptions<BotOptions> options)
         }
     });
 
-    public InlineKeyboardMarkup Languages(string language) => new(new[]
+    public InlineKeyboardMarkup Languages(string language)
     {
-        new[]
-        {
-            InlineKeyboardButton.WithCallbackData(language == "ru" ? "✓ Русский" : "Русский", "language:ru"),
-            InlineKeyboardButton.WithCallbackData(language == "en" ? "✓ English" : "English", "language:en")
-        },
-        new[] { InlineKeyboardButton.WithCallbackData(BotText.Get("Back", language), "home") }
-    });
+        var buttons = BotLanguage.Supported
+            .Select(code => InlineKeyboardButton.WithCallbackData(
+                (code == language ? "✓ " : "") + BotLanguage.Name(code), "language:" + code));
+        var rows = buttons.Chunk(2).Select(row => row.AsEnumerable()).ToList();
+        rows.Add([InlineKeyboardButton.WithCallbackData(BotText.Get("Back", language), "home")]);
+        return new InlineKeyboardMarkup(rows);
+    }
 
     public MenuButtonWebApp Menu(string language) => new()
     {
