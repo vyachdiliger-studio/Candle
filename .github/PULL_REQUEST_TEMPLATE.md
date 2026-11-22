@@ -9,5 +9,5 @@ Closes #
 - [ ] `make lint` passes
 - [ ] Tests added or updated
 - [ ] No secrets, keys or production URLs added
-- [ ] User-visible text localized (frontend: `app_en.arb`, `app_ru.arb`, `app_uk.arb`)
+- [ ] User-visible text localized (frontend: `app_en.arb`, `app_ru.arb`, `app_uk.arb`, `app_th.arb`)
 - [ ] `docs/` updated if documented behaviour changed

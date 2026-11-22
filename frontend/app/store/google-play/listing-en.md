@@ -23,6 +23,6 @@ Place your candle at a location you choose or discover candles nearby. Use your 
 Share a moment
 Send a candle link to someone you care about. They can open it in a browser too.
 
-Sign in with Google, Telegram, or a username and password. Choose English, Ukrainian or Russian in settings.
+Sign in with Google, Telegram, or a username and password. Choose English, Ukrainian, Russian or Thai in settings.
 
 Candles, messages, backgrounds and chosen locations are visible to other users. You can report inappropriate content and block its author.

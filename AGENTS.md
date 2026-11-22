@@ -31,8 +31,8 @@ Architecture: `docs/architecture.md`. Workflow: `docs/development.md`.
   `application` holds Riverpod notifiers; `presentation` uses hooks.
 - Shared infrastructure in `lib/core`, helpers in `lib/common`, routing in `lib/app/router.dart`.
 - Generated files (`*.g.dart`, `*.freezed.dart`, `lib/l10n/generated/`) are not committed.
-- Every user-visible string goes into `lib/l10n/app_en.arb`, `app_ru.arb` and `app_uk.arb`
-  (a test fails if the Ukrainian file misses a key).
+- Every user-visible string goes into `lib/l10n/app_en.arb`, `app_ru.arb`, `app_uk.arb` and
+  `app_th.arb` (a test fails if the Ukrainian or Thai file misses a key).
 - Double quotes; URLs and IDs only in `lib/core/config/app_config.dart`.
 
 ## Rules

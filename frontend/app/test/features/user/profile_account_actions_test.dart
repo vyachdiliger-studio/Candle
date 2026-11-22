@@ -5,7 +5,7 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 
 void main() {
-  for (final language in ["en", "ru"]) {
+  for (final language in ["en", "ru", "th"]) {
     testWidgets("Account actions adapt to width and text scale ($language)", (tester) async {
       await tester.binding.setSurfaceSize(const Size(1400, 1000));
       addTearDown(() => tester.binding.setSurfaceSize(null));
