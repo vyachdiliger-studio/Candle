@@ -19,7 +19,7 @@ container or bot database is required. The frontend is unchanged.
 3. Expose the API webhook URL over HTTPS. The proxy must forward POST bodies and
    `X-Telegram-Bot-Api-Secret-Token` without redirecting to another host.
 4. Start the backend. It applies the language migration and configures the new
-   bot's name, English/Russian descriptions, commands, launch menu and webhook.
+   bot's name, descriptions and commands in every bot language (English as the default), launch menu and webhook.
    Failed setup retries after a minute without stopping the API.
 5. In @BotFather configure the Main Mini App to use `MiniAppUrl`, upload
    `backend/bot/Assets/avatar.png`, and add real screenshots of the app to its profile.
@@ -40,7 +40,7 @@ in BotFather; the SVG is an editable source for the provided PNG avatar.
 
 - `/start`: welcome screen and launch button.
 - `/help`: short instructions and a reminder that candles/messages are public.
-- `/language` or `/settings`: Русский / English, with the selected option marked.
+- `/language` or `/settings`: English, Українська, Русский, ไทย, with the selected option marked.
 - Other input: a short explanation and navigation buttons.
 
 Callbacks edit the current message. Missing/non-editable messages fall back to a
@@ -52,9 +52,12 @@ response, so a welcome message can occasionally repeat; this is not exactly-once
 
 ## Language and account integration
 
-Explicit selection wins over Telegram's optional `language_code`. Russian is used
-for ru; all other/missing languages fall back to English. Text resources live in
-`backend/bot/Localization/Messages.resx` and `Messages.ru.resx`.
+Explicit selection wins over Telegram's optional `language_code`. The bot speaks
+English, Ukrainian, Russian and Thai (`BotLanguage.Supported`); a Telegram language
+among them is used, all other/missing languages fall back to English. Text resources
+live in `backend/bot/Localization/Messages.resx` (English) and `Messages.<lang>.resx`;
+`BotLocalizationTests` checks that every language has every text and that profile
+texts fit Telegram's limits (description 512, short description 120 characters).
 
 `TelegramUserSettings` records explicit selection before the user has a Candle
 account. It uses the numeric Telegram user ID, not username or chat title.

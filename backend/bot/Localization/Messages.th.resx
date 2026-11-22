@@ -1,0 +1,71 @@
+<root>
+  <data name="Welcome" xml:space="preserve">
+    <value>🕯 &lt;b&gt;แสงเทียนเล็กๆ เพื่อคนที่มีความหมายกับคุณ&lt;/b&gt;
+
+Candle คือพื้นที่สำหรับจุดเทียนเพื่อรำลึกถึงใครสักคน ส่งกำลังใจ หรือฝากคำอธิษฐาน
+
+เขียนถ้อยคำสั้นๆ เลือกพื้นหลัง แล้วแชร์เทียนของคุณ ผู้อื่นก็ช่วยให้เปลวเทียนส่องสว่างต่อไปได้
+
+&lt;i&gt;ขอให้มีแสงเทียนเพิ่มขึ้นอีกหนึ่งดวง&lt;/i&gt;</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>🕯 &lt;b&gt;เทียนเล่มแรกของคุณ&lt;/b&gt;
+
+&lt;b&gt;1. เปิด Candle&lt;/b&gt;
+เข้าสู่ระบบ แล้วเลือก "เทียนเล่มใหม่"
+
+&lt;b&gt;2. ใส่ความเป็นตัวคุณ&lt;/b&gt;
+ฝากข้อความ และเลือกรูปภาพพื้นหลังได้ตามต้องการ จากนั้นจุดเทียน
+
+&lt;b&gt;3. แบ่งปันแสงเทียน&lt;/b&gt;
+ส่งลิงก์เทียนให้คนที่คุณห่วงใย การแตะเทียนที่กำลังส่องสว่างช่วยให้เทียนอยู่ได้นานขึ้น
+
+&lt;i&gt;ผู้อื่นจะเห็นเทียนและข้อความของคุณ โปรดเขียนเฉพาะสิ่งที่คุณยินดีแบ่งปัน&lt;/i&gt;</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>🌐 &lt;b&gt;เลือกภาษา / Choose your language&lt;/b&gt;
+
+บอทจะจดจำภาษาที่คุณเลือกไว้
+The bot will remember your choice.</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>ฉันช่วยคุณเปิด Candle แนะนำการจุดเทียนเล่มแรก หรือเปลี่ยนภาษาของบอทได้ โปรดเลือกปุ่มด้านล่าง</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>🕯 เปิด Candle</value>
+  </data>
+  <data name="HelpButton" xml:space="preserve">
+    <value>วิธีใช้งาน</value>
+  </data>
+  <data name="LanguageButton" xml:space="preserve">
+    <value>🌐 ภาษา / Language</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>← กลับ</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>บันทึกภาษาแล้ว</value>
+  </data>
+  <data name="ShortDescription" xml:space="preserve">
+    <value>จุดเทียนเพื่อรำลึก ส่งกำลังใจ หรือฝากคำอธิษฐาน แชร์ให้กันและช่วยกันให้เปลวเทียนส่องสว่าง</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>แสงเทียนเล็กๆ เพื่อคนที่มีความหมายกับคุณ 🕯
+
+สร้างเทียน ฝากข้อความ และเลือกพื้นหลังของคุณเอง แชร์ให้คนสำคัญ แล้วช่วยกันให้เปลวเทียนส่องสว่างต่อไป
+
+เปิด Candle ได้จากปุ่มด้านล่าง ใช้ได้ทั้งใน Telegram บนเว็บ และบนมือถือ</value>
+  </data>
+  <data name="StartCommand" xml:space="preserve">
+    <value>หน้าต้อนรับและเปิดแอป</value>
+  </data>
+  <data name="HelpCommand" xml:space="preserve">
+    <value>วิธีใช้งาน Candle</value>
+  </data>
+  <data name="LanguageCommand" xml:space="preserve">
+    <value>เลือกภาษา</value>
+  </data>
+  <data name="SettingsCommand" xml:space="preserve">
+    <value>ตั้งค่าภาษา</value>
+  </data>
+</root>

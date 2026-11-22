@@ -1,0 +1,71 @@
+<root>
+  <data name="Welcome" xml:space="preserve">
+    <value>🕯 &lt;b&gt;Маленький вогник для тих, хто важливий.&lt;/b&gt;
+
+Candle — місце, де можна запалити свічку в пам'ять про людину, на знак підтримки або з добрим побажанням.
+
+Додайте кілька слів, виберіть фон і поділіться свічкою. Інші люди зможуть підтримати її вогонь.
+
+&lt;i&gt;Нехай одним вогником стане більше.&lt;/i&gt;</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>🕯 &lt;b&gt;Ваша перша свічка&lt;/b&gt;
+
+&lt;b&gt;1. Відкрийте Candle&lt;/b&gt;
+Увійдіть в акаунт і виберіть «Нова свічка».
+
+&lt;b&gt;2. Додайте щось своє&lt;/b&gt;
+Напишіть послання й, якщо хочете, виберіть зображення для фону. Потім запаліть свічку.
+
+&lt;b&gt;3. Поділіться вогником&lt;/b&gt;
+Надішліть посилання на свічку близькій людині. Дотики до палаючої свічки допомагають їй горіти довше.
+
+&lt;i&gt;Свічки й послання бачать інші люди. Пишіть те, чим готові поділитися.&lt;/i&gt;</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>🌐 &lt;b&gt;Виберіть мову / Choose your language&lt;/b&gt;
+
+Бот запам'ятає ваш вибір.
+The bot will remember your choice.</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Я допоможу відкрити Candle, розібратися з першою свічкою або вибрати мову бота. Натисніть потрібну кнопку нижче.</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>🕯 Відкрити Candle</value>
+  </data>
+  <data name="HelpButton" xml:space="preserve">
+    <value>Як це працює</value>
+  </data>
+  <data name="LanguageButton" xml:space="preserve">
+    <value>🌐 Мова / Language</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>← Назад</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>Мову збережено</value>
+  </data>
+  <data name="ShortDescription" xml:space="preserve">
+    <value>Запаліть свічку в пам'ять, на знак підтримки чи з побажанням. Діліться й підтримуйте вогонь разом.</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Маленький вогник для тих, хто важливий. 🕯
+
+Створіть свічку, додайте послання та свій фон. Поділіться нею з близькими й підтримуйте вогонь разом.
+
+Відкрийте Candle кнопкою нижче. Застосунок доступний у Telegram, у браузері та на телефоні.</value>
+  </data>
+  <data name="StartCommand" xml:space="preserve">
+    <value>Привітання й запуск застосунку</value>
+  </data>
+  <data name="HelpCommand" xml:space="preserve">
+    <value>Як користуватися Candle</value>
+  </data>
+  <data name="LanguageCommand" xml:space="preserve">
+    <value>Вибрати мову</value>
+  </data>
+  <data name="SettingsCommand" xml:space="preserve">
+    <value>Налаштування мови</value>
+  </data>
+</root>
