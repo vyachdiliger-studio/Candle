@@ -79,6 +79,6 @@ Never edit existing migrations. The API applies pending migrations on startup.
 - Secrets only in `.env`; new settings get a non-secret default in `appsettings.json`
   and, if secret, a variable in `.env.example` mapped in `compose.yaml`.
 - API changes stay backward-compatible with app versions already in the stores.
-- User-visible app text goes through `frontend/app/lib/l10n/app_en.arb` and `app_ru.arb`.
+- User-visible app text goes through `frontend/app/lib/l10n/app_en.arb`, `app_ru.arb` and `app_uk.arb`.
 - LF line endings everywhere (`.gitattributes`).
 - Update `docs/` when documented behaviour changes.
