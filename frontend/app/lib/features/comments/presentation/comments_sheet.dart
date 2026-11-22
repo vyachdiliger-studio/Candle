@@ -97,16 +97,19 @@ class CommentsSheet extends HookConsumerWidget {
 
     Future<bool> send(String text) async {
       final parent = replyTo.value;
-      final sent = await controller.post(text, parentCommentId: parent?.id);
-      if (!context.mounted) return sent;
-      if (sent) {
-        replyTo.value = null;
-        countDelta.value++;
-        onChanged?.call();
-      } else {
-        showMessage(l10n.commentSendFailed);
+      final result = await controller.post(text, parentCommentId: parent?.id);
+      if (!context.mounted) return result == CommentPostResult.sent;
+      switch (result) {
+        case CommentPostResult.sent:
+          replyTo.value = null;
+          countDelta.value++;
+          onChanged?.call();
+        case CommentPostResult.invalidText:
+          showMessage(l10n.commentTextInvalid(CommentComposer.maxLength));
+        case CommentPostResult.failed:
+          showMessage(l10n.commentSendFailed);
       }
-      return sent;
+      return result == CommentPostResult.sent;
     }
 
     Future<void> act(CandleComment comment, CommentAction action) async {

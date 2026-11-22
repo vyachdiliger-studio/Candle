@@ -1,6 +1,7 @@
 import "package:candle_frontend/features/candle/domain/models/candle.dart";
 import "package:candle_frontend/features/comments/domain/candle_comment.dart";
 import "package:candle_frontend/features/comments/domain/comment_repository.dart";
+import "package:dio/dio.dart";
 
 /// In-memory comment thread with the server's ordering and page size.
 class FakeCommentRepository implements CommentRepository {
@@ -10,6 +11,9 @@ class FakeCommentRepository implements CommentRepository {
   final List<CandleComment> all = [];
   int requests = 0;
   bool failCreate = false;
+
+  /// The API's error code for a failed create; null for a network failure.
+  String? createError;
   bool failDelete = false;
   final deleted = <int>[];
 
@@ -74,7 +78,15 @@ class FakeCommentRepository implements CommentRepository {
 
   @override
   Future<CandleComment> create(int candleId, {required String text, int? parentCommentId}) async {
-    if (failCreate) throw Exception("offline");
+    if (failCreate) {
+      final request = RequestOptions(path: "/candles/$candleId/comments");
+      throw createError == null
+          ? DioException(requestOptions: request, type: DioExceptionType.connectionError)
+          : DioException(
+              requestOptions: request,
+              response: Response(requestOptions: request, statusCode: 400, data: createError),
+            );
+    }
     return add(text, parent: parentCommentId, authorId: 42, username: "me");
   }
 

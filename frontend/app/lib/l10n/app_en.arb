@@ -278,6 +278,15 @@
   "signInToComment": "Sign in to comment",
   "sendComment": "Send",
   "commentSendFailed": "Could not send the comment. Please retry.",
+  "commentTextInvalid": "Comments can’t be empty or longer than {max} characters.",
+  "@commentTextInvalid": {
+    "description": "The server refused a comment's text; max is the length limit in user-perceived characters.",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
   "deleteComment": "Delete comment",
   "deleteCommentConfirm": "Delete this comment? This cannot be undone.",
   "deleteCommentWithReplies": "{count, plural, =1{Delete this comment and 1 reply? This cannot be undone.} other{Delete this comment and {count} replies? This cannot be undone.}}",

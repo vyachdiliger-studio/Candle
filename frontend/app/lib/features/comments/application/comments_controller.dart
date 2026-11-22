@@ -1,3 +1,4 @@
+import "package:dio/dio.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 import "../../../core/security/session_epoch.dart";
@@ -6,6 +7,16 @@ import "../domain/candle_comment.dart";
 import "../domain/comment_repository.dart";
 
 part "comments_controller.g.dart";
+
+enum CommentPostResult {
+  sent,
+
+  /// The server refused the text: empty or over the length limit.
+  invalidText,
+
+  /// The server refused otherwise or could not be reached.
+  failed,
+}
 
 /// One paginated list: a candle's top-level comments or one comment's replies.
 class CommentList {
@@ -144,8 +155,8 @@ class CommentsController extends _$CommentsController {
   }
 
   /// Posts a comment, or a reply when [parentCommentId] is set, and shows it at
-  /// once. Returns false when the server refused or could not be reached.
-  Future<bool> post(String text, {int? parentCommentId}) async {
+  /// once.
+  Future<CommentPostResult> post(String text, {int? parentCommentId}) async {
     final operationRef = ref;
     final CandleComment created;
     try {
@@ -154,22 +165,26 @@ class CommentsController extends _$CommentsController {
         text: text.trim(),
         parentCommentId: parentCommentId,
       );
+    } on DioException catch (error) {
+      return error.response?.data == "invalid_comment_text"
+          ? CommentPostResult.invalidText
+          : CommentPostResult.failed;
     } catch (_) {
-      return false;
+      return CommentPostResult.failed;
     }
-    if (!operationRef.mounted) return false;
+    if (!operationRef.mounted) return CommentPostResult.failed;
 
     if (parentCommentId == null) {
       state = state.copyWith(
         comments: {...state.comments, created.id: created},
         top: state.top.copyWith(ids: [created.id, ...state.top.ids]),
       );
-      return true;
+      return CommentPostResult.sent;
     }
 
     // Load what the branch already holds first, so the new reply lands after it.
     await showReplies(parentCommentId);
-    if (!operationRef.mounted) return true;
+    if (!operationRef.mounted) return CommentPostResult.sent;
     final comments = {...state.comments, created.id: created};
     _adjustAncestors(comments, parentCommentId, 1);
     final list = state.repliesList(parentCommentId);
@@ -183,7 +198,7 @@ class CommentsController extends _$CommentsController {
         ),
       },
     );
-    return true;
+    return CommentPostResult.sent;
   }
 
   /// Deletes an own comment together with its whole branch, as the server does.
