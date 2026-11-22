@@ -104,7 +104,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text("Commit 1234567"), findsOneWidget);
     expect(find.text("What’s new"), findsOneWidget);
-    expect(find.text("Candle discussions"), findsOneWidget);
+    expect(find.text("Comments on candles"), findsOneWidget);
+    expect(find.text("Ukrainian and Thai"), findsOneWidget);
     await tester.tap(find.text("Copy build information"));
     await tester.pumpAndSettle();
     expect(copied, "Candle\nVersion 1.2.3 · Build 42\nCommit $revision");
@@ -132,13 +133,13 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text("Версия 1.2.3 · Сборка 42"), findsWidgets);
     await tester.scrollUntilVisible(
-      find.text("Свои свечи на карте"),
+      find.text("Украинский и тайский"),
       200,
       scrollable: find
           .descendant(of: find.byType(AlertDialog), matching: find.byType(Scrollable))
           .first,
     );
-    expect(find.text("Свои свечи на карте"), findsOneWidget);
+    expect(find.text("Украинский и тайский"), findsOneWidget);
     expect(tester.takeException(), isNull);
     await tester.tap(find.text("Закрыть"));
     await tester.pumpAndSettle();
