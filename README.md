@@ -65,6 +65,7 @@ First-time server setup and the move from the old layout:
 - [`frontend/`](docs/frontend): app behaviour (auth, sessions, diagnostics)
 
 Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md). AI coding agents: [`AGENTS.md`](AGENTS.md).
+Security issues: report privately, see [`SECURITY.md`](SECURITY.md).
 
 ## License
 
