@@ -29,7 +29,7 @@ same server. In development nothing sits in front of `proxy`.
 | ----------------- | --------------- | ----- |
 | `/api`, `/api/*`  | `api:8080`      | Prefix is not stripped |
 | `/candles/*`      | `api:8080`      | Server-rendered entry point with link-preview metadata |
-| `/candle-media/*` | `storage:8333`  | Presigned S3 uploads/downloads; Host and query must stay intact |
+| `/candle-media/uploads/*` | `storage:8333` | Only `PUT` and `OPTIONS`: presigned uploads; Host and query must stay intact. Any other `/candle-media` request gets 404 |
 | everything else   | `web:80`        | Flutter web, SPA fallback to `index.html` |
 
 The API fetches the Flutter `index.html` from `http://web/index.html` to render
