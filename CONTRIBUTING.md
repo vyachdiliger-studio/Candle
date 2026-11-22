@@ -20,7 +20,7 @@ New ideas: open an issue first. The roadmap is owned by the maintainers.
   through `.env` (documented in `.env.example`).
 - Database changes: add an EF migration with the model change; never edit existing migrations.
 - Keep API changes backward-compatible: store apps cannot update instantly.
-- User-visible text in English, Russian and Ukrainian (`frontend/app/lib/l10n/*.arb`).
+- User-visible text in English, Russian, Ukrainian and Thai (`frontend/app/lib/l10n/*.arb`).
   Don't speak one of them? A careful machine translation is fine: say so in the PR
   and a maintainer will check it.
 - Add or update tests for logic you change.
