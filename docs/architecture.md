@@ -45,6 +45,8 @@ The API fetches the Flutter `index.html` from `http://web/index.html` to render
 - The Flutter app takes `API_BASE_URL` / `SHARE_BASE_URL` via `--dart-define`
   (defaults: production). The `web` image is built with both derived from `PUBLIC_URL`.
 - Outside Development the API refuses to start with an empty or placeholder JWT key.
+- Outside Development the API also refuses to start with the example storage keys or
+  database password from `.env.example` (`DevelopmentCredentials`).
 
 ## Images
 
