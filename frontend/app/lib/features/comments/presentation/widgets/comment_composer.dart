@@ -18,6 +18,8 @@ class CommentComposer extends HookWidget {
     this.onCancelReply,
   });
 
+  /// User-perceived characters: the field counts grapheme clusters, and so does
+  /// the API (docs/backend/candle-comments.md), so an emoji counts once.
   static const maxLength = 1000;
 
   /// The counter appears close to the limit only.

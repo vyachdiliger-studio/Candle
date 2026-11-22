@@ -198,6 +198,23 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets("a comment the server refuses keeps its text and explains why", (tester) async {
+    repository
+      ..failCreate = true
+      ..createError = "invalid_comment_text";
+    await open(tester, userId: 42);
+    await tester.enterText(find.byKey(const ValueKey("comment-field")), "Too long");
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey("comment-send")));
+    await tester.pumpAndSettle();
+    expect(
+      find.text("Comments can’t be empty or longer than 1000 characters."),
+      findsOneWidget,
+    );
+    expect(find.text("Too long"), findsOneWidget, reason: "the draft is kept");
+    expect(find.text("Comments · 3"), findsOneWidget);
+  });
+
   testWidgets("deleting a comment with replies warns and removes the branch", (tester) async {
     await open(tester, userId: 7);
     await tester.tap(find.byIcon(Icons.more_horiz).first);

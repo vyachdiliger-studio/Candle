@@ -3,6 +3,7 @@ using CandleBackend.Dtos;
 using CandleBackend.Extensions;
 using CandleBackend.Models;
 using CandleBackend.Pagination;
+using CandleBackend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -60,9 +61,8 @@ public sealed class CandleCommentsController(AppDbContext db, CommentCursor curs
         [FromBody] CreateCandleCommentRequest body,
         CancellationToken cancellationToken)
     {
-        var text = body.Text?.Trim();
-        if (string.IsNullOrEmpty(text) || text.Length > CandleComment.TextMaxLength)
-            return BadRequest("invalid_comment_text");
+        var text = CommentRules.CleanText(body.Text);
+        if (text is null) return BadRequest("invalid_comment_text");
         if (!await CandleExists(candleId, cancellationToken)) return NotFound("candle_not_found");
 
         var comment = new CandleComment

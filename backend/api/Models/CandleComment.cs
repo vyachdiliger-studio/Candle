@@ -15,7 +15,12 @@ namespace CandleBackend.Models;
 [Index(nameof(UserId))]
 public sealed class CandleComment
 {
+    /// <summary>User-perceived characters (grapheme clusters), see <c>CommentRules</c>.</summary>
     public const int TextMaxLength = 1000;
+
+    /// <summary>UTF-16 code units; leaves room for emoji made of several code points.</summary>
+    public const int TextMaxStorageLength = 4000;
+
     public const int PathMaxLength = 4000;
 
     public long Id { get; set; }
@@ -38,7 +43,7 @@ public sealed class CandleComment
     /// <summary>0 for a top-level comment, 1 for a reply to it, and so on.</summary>
     public int Depth { get; set; }
 
-    [MaxLength(TextMaxLength)]
+    [MaxLength(TextMaxStorageLength)]
     public string Text { get; set; } = "";
 
     public DateTime CreatedAt { get; set; }

@@ -43,8 +43,9 @@ void main() {
   testWidgets("values sit above their localized labels, including zero days", (tester) async {
     const localizedLabels = {
       "en": ["days", "hours", "min", "sec"],
-      "ru": ["дней", "часов", "минут", "секунд"],
-      "uk": ["днів", "годин", "хвилин", "секунд"],
+      "ru": ["дн", "ч", "мин", "сек"],
+      "uk": ["дн", "год", "хв", "сек"],
+      "th": ["วัน", "ชั่วโมง", "นาที", "วินาที"],
     };
     for (final locale in localizedLabels.keys) {
       await show(
@@ -65,7 +66,7 @@ void main() {
 
   testWidgets("narrow headers, long days and enlarged text stay between controls", (tester) async {
     for (final width in [280.0, 320.0, 600.0]) {
-      for (final locale in ["en", "ru", "uk"]) {
+      for (final locale in ["en", "ru", "uk", "th"]) {
         await show(
           tester,
           width: width,

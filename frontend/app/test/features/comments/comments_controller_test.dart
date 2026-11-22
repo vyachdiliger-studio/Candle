@@ -70,16 +70,16 @@ void main() {
     repository.add("first reply", parent: root.id);
     await controller().refresh();
 
-    expect(await controller().post("  hello  "), isTrue);
+    expect(await controller().post("  hello  "), CommentPostResult.sent);
     expect(texts(state().top.ids), ["hello", "root"]);
 
-    expect(await controller().post("my reply", parentCommentId: root.id), isTrue);
+    expect(await controller().post("my reply", parentCommentId: root.id), CommentPostResult.sent);
     expect(state().isExpanded(root.id), isTrue);
     expect(texts(state().replies[root.id]!.ids), ["first reply", "my reply"]);
     expect(state().comments[root.id]!.repliesCount, 2);
 
     final reply = state().replies[root.id]!.ids.last;
-    expect(await controller().post("deeper", parentCommentId: reply), isTrue);
+    expect(await controller().post("deeper", parentCommentId: reply), CommentPostResult.sent);
     expect(state().comments[reply]!.repliesCount, 1);
     expect(state().comments[root.id]!.repliesCount, 3, reason: "every ancestor counts it");
     expect(texts(state().replies[reply]!.ids), ["deeper"]);
@@ -89,8 +89,17 @@ void main() {
     repository.add("root");
     await controller().refresh();
     repository.failCreate = true;
-    expect(await controller().post("lost"), isFalse);
+    expect(await controller().post("lost"), CommentPostResult.failed);
     expect(texts(state().top.ids), ["root"]);
+  });
+
+  test("a refused text is told apart from other failures", () async {
+    repository.failCreate = true;
+    repository.createError = "invalid_comment_text";
+    expect(await controller().post("too long"), CommentPostResult.invalidText);
+    repository.createError = "candle_not_found";
+    expect(await controller().post("lost"), CommentPostResult.failed);
+    expect(state().top.ids, isEmpty);
   });
 
   test("deleting removes the comment with its whole branch", () async {

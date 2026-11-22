@@ -5,19 +5,36 @@
 1. Push to `master`. GitHub Actions (`.github/workflows/ci.yml`) runs `make lint`,
    then builds the production images and pushes them to GHCR:
    `ghcr.io/vyachdiliger-studio/candle-api` and `candle-web`, tags `latest` and the commit SHA.
-2. Wait for the green check on GitHub (about 10 minutes).
-3. On the server:
+2. The `deploy` job (environment `production`) then rolls the server forward to
+   exactly that commit, about 10 minutes after the push. Nothing to do by hand.
 
-   ```bash
-   cd /srv/candle/Candle && make deploy
-   ```
+### Automatic deploys
 
-   `make deploy` = `git pull --ff-only` (compose files, Candle's Caddyfile) +
-   `docker compose pull` + `up -d` (recreates only what changed) + `docker image prune`.
-   The server never builds anything.
+The job connects as `root@candle.vyachdiliger.com` with a key that may only run the
+forced command `/usr/local/bin/candle-deploy` (`deploy/candle-deploy.sh`):
+
+```text
+# /root/.ssh/authorized_keys
+restrict,command="/usr/local/bin/candle-deploy" ssh-ed25519 ... github-actions-deploy
+```
+
+The script takes the commit SHA, refuses anything not on `origin/master` and never
+moves the server back to an older commit. It fast-forwards the checkout (compose
+files, Caddyfile), pulls and starts the images tagged with that SHA, checks `/` and
+`/api`, then prunes old images. Runs are serialized with `flock`.
+
+Secrets live in the `production` environment (deployable from `master` only):
+`DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS`; variable `DEPLOY_HOST`. After changing
+`deploy/candle-deploy.sh`, copy it to the server
+(`scp deploy/candle-deploy.sh root@HOST:/usr/local/bin/candle-deploy`).
+To revoke CI access, delete that line from `authorized_keys`.
+
+**Manual deploy** (same result, e.g. if CI is down): `cd /srv/candle/Candle && make deploy`,
+or `candle-deploy <sha>` for a specific commit.
 
 **Rollback**: set `IMAGE_TAG=<previous commit SHA>` in `.env`, run `make prod`;
 set it back to `latest` afterwards. Database migrations are not rolled back automatically.
+The next push to `master` deploys again.
 
 ## Server layout
 
@@ -153,7 +170,24 @@ docker run --rm -v candle_media_data:/data:ro -v "$PWD":/out alpine tar czf /out
 
 ## Mobile releases
 
-The server and CI build only the web app. Android/iOS releases are built locally from
-`frontend/app`. The Android upload keystore and `android/key.properties` are never
-committed (`frontend/app/android/.gitignore`): keep them in a password manager or
-another backup outside the repository.
+**Android** is released by `.github/workflows/android-release.yml` on every push to
+`master` that changes `frontend/app`: tests, a signed bundle, upload to Google Play
+(track from the `PLAY_TRACK` variable, `production` by default; Google reviews each
+release). `versionCode` is `ANDROID_VERSION_CODE_OFFSET` (100) + the workflow run
+number; `versionName` comes from `pubspec.yaml`. Release notes are the files in
+`frontend/app/store/google-play/whatsnew/` (`whatsnew-<locale>`, at most 500
+characters, only languages the Play listing has): update them together with
+user-visible changes.
+
+Secrets live in the `play` environment (`master` only): `ANDROID_KEYSTORE_BASE64`,
+`ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD` (the upload
+key) and `PLAY_SERVICE_ACCOUNT_JSON` (Google Cloud project `candle-marks`, service
+account `github-play-upload`, invited in Play Console with release permissions for
+Candle only).
+
+The upload keystore and `android/key.properties` are never committed
+(`frontend/app/android/.gitignore`): keep them in a password manager or another
+backup outside the repository. If the upload key is lost, reset it in Play Console →
+App signing (the app signing key is held by Google).
+
+**iOS** is built (without signing) by `.github/workflows/ios.yml`; it isn't released yet.

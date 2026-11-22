@@ -13,9 +13,15 @@ When Settings is opened directly by URL, its back button goes to the application
 root (login for guests). When pushed from another screen, it returns to that
 screen. The shared page shell honors the active nested route's pop/exit guards.
 
+<<<<<<< HEAD
+The changelog is a short list of user-facing changes in the current version,
+written for end users (no tester instructions), bundled with the application. Update the `release*Title` / `release*Body` entries in both
+`frontend/app/lib/l10n/app_en.arb`, `app_ru.arb` and `app_uk.arb` when preparing a release. Add or
+=======
 The changelog is a curated list of changes and manual test scenarios bundled with
 the application. Update the `release*Title` / `release*Body` entries in both
-`frontend/app/lib/l10n/app_en.arb`, `app_ru.arb` and `app_uk.arb` when preparing a release. Add or
+`frontend/app/lib/l10n/app_en.arb`, `app_ru.arb`, `app_uk.arb` and `app_th.arb` when preparing a release. Add or
+>>>>>>> feat/thai-localization
 remove corresponding entries in `app_info_tile.dart`. These notes describe the
 frontend artifact, not the current backend deployment. Do not fetch notes from
 `master`: an older installed client must keep its own notes.

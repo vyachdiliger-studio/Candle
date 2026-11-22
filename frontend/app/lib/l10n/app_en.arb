@@ -13,15 +13,15 @@
   "copyBuildInfo": "Copy build information",
   "buildInfoCopyFailed": "Could not copy. Select the build information and copy it manually.",
   "whatsNew": "What’s new",
-  "releaseNotesHint": "Changes included in this build and things to try. This list is bundled with the app, so it also works offline.",
-  "releaseBuildInfoTitle": "Build information",
-  "releaseBuildInfoBody": "Find the installed version and build number in Settings → About Candle. Copy them when reporting a problem so we can identify the build you tested.",
-  "releaseCountdownTitle": "Labelled candle countdown",
-  "releaseCountdownBody": "Remaining time is shown in four columns: days, hours, minutes and seconds. Try a narrow screen and larger text: values and labels should stay aligned and clear of the controls.",
-  "releaseCommentsTitle": "Candle discussions",
-  "releaseCommentsBody": "Read comments, reply and open deeper discussion branches. Deleting your own comment also removes its replies. Guests can read discussions and are asked to sign in before writing.",
-  "releaseMapTitle": "Your candles on the map",
-  "releaseMapBody": "Your candles have a small user badge at their base. Clusters containing your candles show it beside the count. Select a candle or zoom the map: ownership badges should remain visible without replacing the selection ring.",
+  "releaseNotesHint": "Here’s what’s new in this version of Candle.",
+  "releaseCommentsTitle": "Comments on candles",
+  "releaseCommentsBody": "Leave a few kind words under any candle and reply to others. If a comment doesn’t feel right, report it.",
+  "releaseCountdownTitle": "A clearer countdown",
+  "releaseCountdownBody": "See at a glance how long a candle will keep burning, in days, hours, minutes and seconds.",
+  "releaseLanguagesTitle": "Ukrainian and Thai",
+  "releaseLanguagesBody": "Candle now speaks Ukrainian and Thai. Choose your language in Settings → Language.",
+  "releaseAboutTitle": "About Candle",
+  "releaseAboutBody": "Settings → About Candle shows which version you have, so you can tell us exactly when something goes wrong.",
   "@@locale": "en",
   "settings": "Settings",
   "language": "Language",
@@ -276,6 +276,15 @@
   "signInToComment": "Sign in to comment",
   "sendComment": "Send",
   "commentSendFailed": "Could not send the comment. Please retry.",
+  "commentTextInvalid": "Comments can’t be empty or longer than {max} characters.",
+  "@commentTextInvalid": {
+    "description": "The server refused a comment's text; max is the length limit in user-perceived characters.",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
   "deleteComment": "Delete comment",
   "deleteCommentConfirm": "Delete this comment? This cannot be undone.",
   "deleteCommentWithReplies": "{count, plural, =1{Delete this comment and 1 reply? This cannot be undone.} other{Delete this comment and {count} replies? This cannot be undone.}}",
