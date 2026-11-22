@@ -22,6 +22,8 @@
   "releaseCommentsBody": "Read comments, reply and open deeper discussion branches. Deleting your own comment also removes its replies. Guests can read discussions and are asked to sign in before writing.",
   "releaseMapTitle": "Your candles on the map",
   "releaseMapBody": "Your candles have a small user badge at their base. Clusters containing your candles show it beside the count. Select a candle or zoom the map: ownership badges should remain visible without replacing the selection ring.",
+  "releaseUkrainianTitle": "Ukrainian language",
+  "releaseUkrainianBody": "The app is now available in Ukrainian. Open Settings → Language and choose Українська: all screens, error messages, the privacy policy and these notes should switch without a restart. Check word forms after numbers, for example the supporter and comment counts for 1, 2, 5 and 21.",
   "@@locale": "en",
   "settings": "Settings",
   "language": "Language",

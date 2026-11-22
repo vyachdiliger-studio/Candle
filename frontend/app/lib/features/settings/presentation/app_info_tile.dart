@@ -104,6 +104,7 @@ class _AppInfoDialog extends ConsumerWidget {
             Text(l10n.releaseNotesHint),
             const SizedBox(height: Sizes.medium),
             for (final entry in [
+              (title: l10n.releaseUkrainianTitle, body: l10n.releaseUkrainianBody),
               (title: l10n.releaseBuildInfoTitle, body: l10n.releaseBuildInfoBody),
               (title: l10n.releaseCountdownTitle, body: l10n.releaseCountdownBody),
               (title: l10n.releaseCommentsTitle, body: l10n.releaseCommentsBody),
