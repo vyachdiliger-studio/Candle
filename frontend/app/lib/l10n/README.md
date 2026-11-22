@@ -1,6 +1,6 @@
 # Localization
 
-User-facing copy lives in `app_en.arb` and `app_ru.arb`. English is the template
+User-facing copy lives in `app_en.arb`, `app_ru.arb` and `app_uk.arb`. English is the template
 and the fallback for unsupported device languages. User content, API values,
 URLs and diagnostic logs are not translation keys.
 
